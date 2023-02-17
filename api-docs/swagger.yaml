@@ -37,6 +37,66 @@ paths:
                 type: string
       security:
         - cookieAuth: []
+  /signup:
+    post:
+      summary: User Signup
+      description: "Creates a new user object"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string
+              user_password:
+                type: string
+              user_mobile:
+                type: number
+            required:
+              - user_name
+              - user_password
+              - user_mobile
+          example:
+            user_name: exampleuser
+            user_password: examplepassword
+            user_mobile: "12345678899"
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              data:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  user_name:
+                    type: string
+                  email:
+                    type: string
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
   /login:
     post:
       summary: User Login
@@ -100,69 +160,8 @@ paths:
                 type: string
               message:
                 type: string
-      security:
-        - cookieAuth: []
 
-  /signup:
-    post:
-      summary: User Signup
-      description: "Creates a new user object"
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              user_name:
-                type: string
-              user_password:
-                type: string
-              user_mobile:
-                type: number
-            required:
-              - user_name
-              - user_password
-              - user_mobile
-          example:
-            user_name: exampleuser
-            user_password: examplepassword
-            user_mobile: "12345678899"
-      responses:
-        201:
-          description: Created
-          schema:
-            type: object
-            properties:
-              STATUS:
-                type: string
-              data:
-                type: object
-                properties:
-                  user_id:
-                    type: integer
-                  user_name:
-                    type: string
-                  email:
-                    type: string
-        400:
-          description: Bad Request
-          schema:
-            type: object
-            properties:
-              STATUS:
-                type: string
-              message:
-                type: string
-        500:
-          description: Internal Server Error
-          schema:
-            type: object
-            properties:
-              STATUS:
-                type: string
-              message:
-                type: string
+
   /notes:
     post:
       summary: Create Note
