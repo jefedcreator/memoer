@@ -14,19 +14,6 @@ router.get("/", (req, res) => {
     }
 });
 
-router.get("/users", (req, res) => {
-    try {
-        usersController.getUsers((err, results) => {
-        if (err) {
-            return res.status(400).send({STATUS:"ERROR",message: err.message})
-        }
-        return res.status(200).send({STATUS:"OK",data:results})
-        });
-    } catch (err) {
-        res.status(500).send({STATUS:"ERROR",message: err.message})
-    }
-});
-
 router.post("/login", (req, res) => {
     try {
         const userDetails = {

@@ -1,65 +1,321 @@
-# KeepNote MySQL Queries
+# KeepNotes
 
 ## Context
 
-Keep Note is a website that helps users capture their minds and allows them to add notes and lists. It also allows adding a reminder to make sure that the user never misses a thing. It is possible to add labels to notes to quickly organize and get on with it.  ​
+Keep Note is a express and node js that helps users capture their minds and allows them to add notes and lists.​
 
-Keep Note application allows only the registered users to add notes and access them. To persist user details and notes information, it must be stored in a database that should be highly secure and reliable. ​
-
-Due to its growing popularity, the number of users accessing the application has increased multifold. For a seamless user experience, choosing the right database which performs well and provides data faster is the need of the hour. ​
+Keep Note application allows only the registered users to add notes and access them. To persist user details and notes information, it is stored in a MSQL database that is highly secure and reliable. ​
 
 MySQL database server is open-source database software that is faster, secured,  reliable and cheaper because of its unique storage engine architecture. ​
 
-The backend development team is now responsible for persisting the application data in the MySQL database which ensures durability. 
 
-## Problem Statement
-
-Keep Note application is used to​
-
-- Take notes​
-- Add notes to labels/categories​
-- Set reminders for a note.​
-
-As the first step in creating the application, create the necessary DB schema in MySQL database including tables, relationships and add sample data to each table using SQL queries. ​
-
-### Task: Write SQL queries 
-
-- Create the tables for Note, Category, Reminder, User, UserNote, NoteReminder and NoteCategory.
-- User table fields: user_id, user_name, user_added_date, user_password, user_mobile
-- Note table fields: note_id, note_title, note_content, note_status, note_creation_date
-- Category table fields : category_id, category_name, category_descr, category_creation_date, category_creator
-- Reminder table fields : reminder_id, reminder_name, reminder_descr, reminder_type, reminder_creation_date, reminder_creator
-- NoteCategory table fields : notecategory_id, note_id, category_id
-- Notereminder table fields : notereminder_id, note_id, reminder_id
-- Usernote table fields : usernote_id, user_id, note_id
-- Insert the rows into the created tables (Note, Category, Reminder, User, UserNote, NoteReminder and NoteCategory).
-- Fetch the row from User table based on Id and Password.
-- Fetch all the rows from Note table based on the field note_creation_date.
-- Fetch all the Categories created after the particular Date.
-- Fetch all the Note ID from UserNote table for a given User.
-- Write Update query to modify particular Note for the given note Id.
-- Fetch all the Notes from the Note table by a particular User.
-- Fetch all the Notes from the Note table for a particular Category.
-- Fetch all the reminder details for a given note id.
-- Fetch the reminder details for a given reminder id.
-- Write a query to create a new Note from particular User (Use Note and UserNote tables - insert statement).
-- Write a query to create a new Note from particular User to particular Category(Use Note and NoteCategory tables - insert statement)
-- Write a query to set a reminder for a particular note (Use Reminder and NoteReminder tables - insert statement)
-- Write a query to delete particular Note added by a User(Note and UserNote tables - delete statement)
-- Write a query to delete particular Note from particular Category(Note and NoteCategory tables - delete statement)
+## API Documentation
+This is the documentation for the REST API built using Express.js. The API is used for a note-keeping application that requires users to sign up and log in to access the service.
 
 ### Instructions
 
-1. Download and unzip the boilerplate code.  
-2. Run the command `npm install` to install the dependencies. 
-3. Open the boilerplate code in VSCode to develop the assignment solution.
-4. Read the given set of questions and solve them by writing queries using MySQL.
-5. Add the queries using MySQL commands inside notesdb.sql 
-6. Execute the queries in MySQL workbench to view the expected results.
-7. Zip the solution code with the same name as the assignment name.  
-8. Upload the zipped solution for submission. 
+Getting Started
+To get started with the API, follow these steps:
+
+1. Clone the repository onto your local machine using git clone <repository-url>.
+
+2. Run `npm install` to install all the required dependencies.
+
+3. Run `npm start` to start the server.
+
+The server will be available at http://localhost:8000/api/v1/
+
+## Endpoints
+The following endpoint is available:
+
+`GET /`
+
+This endpoint is used to check if the user is authenticated. The endpoint checks for the presence of a username cookie. If the cookie is present, a welcome message is returned. If the cookie is not present, an error message is returned.
+
+Response:
+
+```json
+Status: 200 OK
+{
+"STATUS": "OK",
+"message": "hello <username>, welcome to keep notes!!! 😉"
+}
+```
+OR:
+```json
+Status: 400 Bad Request
+{
+  "STATUS": "ERROR",
+  "message": "Signup and login to get authenticated"
+}
+```
+
+The response body contains the following fields:
+
+STATUS: A string indicating the status of the response, either "OK" or "ERROR".
+message: A message explaining the result of the request.
+The HTTP status codes used by the endpoint are:
+
+200 OK: The request was successful and the user is authenticated.
+400 Bad Request: The request was unsuccessful because the user is not authenticated.
+The endpoint takes no request parameters.
+
+The endpoint can throw the following errors:
+
+500 Internal Server Error: An internal server error occurred.
+
+`POST /signup`
+
+This endpoint is used to sign up a new user by submitting their details in the request body. The user's details include:
+
+user_name (required) - The username of the user
+user_mobile (required) - The mobile number of the user
+user_password (required) - The password of the user
+
+Request:
+```json
+POST /signup
+Content-Type: application/json
+
+{
+  "user_name": "jane",
+  "user_password": "password123",
+  "user_mobile": "123344555"
+}
+```
+
+Response:
+```json
+Status: 200 OK
+{
+    "STATUS": "OK",
+    "data": {
+        "user_id": 2,
+        "user_name": "jane",
+        "user_added_date": "2023-02-17T12:01:33.000Z",
+        "user_password": "password123",
+        "user_mobile": "12345678912"
+    }
+}
+```
+If the request is successful, the API will respond with a status code of 201 (Created) and the data property will contain the newly created user object.
+
+If the request is unsuccessful, the API will respond with a status code of 400 (Bad Request) and the message property will contain an error message describing the issue.
+
+If an unexpected error occurs, the API will respond with a status code of 500 (Internal Server Error) and the message property will contain an error message describing the issue.
+
+`POST /login`
+
+This endpoint is used to authenticate a user by logging them in.
+
+Request:
+```json
+POST /login
+Content-Type: application/json
+
+{
+  "user_name": "jane",
+  "user_password": "password123"
+}
+```
+The request body contains the following fields:
+
+user_email: The email address of the user.
+user_password: The password of the user.
+
+Response:
+```json
+Status: 200 OK
+{
+  "STATUS": "OK",
+  "data": [
+    {
+      "user_id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    }
+  ]
+}
+```
+
+The response body contains the following fields:
+
+STATUS: A string indicating the status of the response, either "OK" or "ERROR".
+data: An array containing a single user object with the following fields:
+user_id: A unique identifier for the user.
+name: The name of the user.
+email: The email address of the user.
+The HTTP status codes used by the endpoint are:
+
+200 OK: The request was successful and the user is authenticated.
+400 Bad Request: The request was unsuccessful due to an error, and an error message is returned.
+The endpoint takes no request parameters.
+
+The endpoint can throw the following errors:
+
+500 Internal Server Error: An internal server error occurred.
+Cookies
+This endpoint sets a cookie named "id" on the response. This cookie contains the user ID of the authenticated user, which is used to authenticate subsequent requests.
+
+`POST /notes`
+
+This endpoint is used to create a new note for the authenticated user by submitting the note details in the request body. The note details include:
+
+note_title (required) - The title of the note
+note_content (required) - The content of the note
+note_status (required) - The note status, active or inactive
+
+Request body:
+```json
+{
+  "note_title":"Demo",
+  "note_content": "This is a demo note",
+  "note_status" :"active"
+}
+
+```
+Response body:
+```json
+{
+    "STATUS": "OK",
+    "data": {
+        "note_id": 4,
+        "note_title": "Demo",
+        "note_content": "This is a demo note",
+        "note_status": "active",
+        "note_creation_date": "2023-02-17T17:00:19.000Z",
+        "note_creator": 2
+    }
+}
+```
+
+If the request is successful, the API will respond with a status code of 200 (OK) and the data property will contain the newly created note object.
+
+If the request is unsuccessful, the API will respond with a status code of 400 (Bad Request) and the message property will contain an error message describing the issue. Possible issues include:
+
+Invalid note details
+User not logged in
+If an unexpected error occurs, the API will respond with a status code of 500 (Internal Server Error) and the message property will contain an error message describing the issue.
+
+`GET /notes`
+
+This endpoint is responsible for retrieving all the notes associated with the authenticated user. It returns a JSON response with a list of notes.
+
+Response
+Status Code: 200 OK
+Content-Type: application/json
+Body:
+If successful, the response body will be a JSON object containing a STATUS key with value "OK" and a data key containing an array of notes.
+
+```json
+{
+    "STATUS": "OK",
+    "data": [
+        {
+            "note_id": 1,
+            "title": "Note 1",
+            "content": "This is the first note",
+            "note_status": "inactive",
+            "note_creator": 1,
+            "created_at": "2022-02-15T15:00:00.000Z",
+        },
+        {
+            "note_id": 2,
+            "title": "Note 2",
+            "content": "This is the second note",
+            "note_status": "active",
+            "note_creator": 1,
+            "note_creation_time": "2022-02-15T16:00:00.000Z",
+        }
+    ]
+}
+
+```
+If the user is not authenticated, the endpoint will return an error message with a status code of 400 Bad Request.
+```json
+{
+    "STATUS": "ERROR",
+    "message": "login to view your notes"
+}
+```
+If an error occurs on the server, the endpoint will return an error message with a status code of 500 Internal Server Error.
+```json
+{
+    "STATUS": "ERROR",
+    "message": "Internal Server Error"
+}
+```
+
+`PUT /notes/:id`
+
+This API endpoint allows authenticated users to update their notes by providing the note id and note details.
+
+Request Parameters
+Path Parameter: `id` The id of the note to update. (Required).
+
+Request body:
+```json
+{
+    "note_title": "Demo",
+    "note_content": "This is a demo note",
+    "note_status": "active",
+}
+```
+
+Request Headers
+This endpoint expects a cookie with the `id` parameter to be present in the request header to authenticate the user. The user `id` is obtained during the login process. Required.
+
+Response:
+```json
+{
+    "STATUS": "OK",
+    "data": {
+        "note_id": 4,
+        "note_title": "Demo",
+        "note_content": "This is a demo note",
+        "note_status": "active",
+        "note_creation_date": "2023-02-17T17:00:19.000Z",
+        "note_creator": 2
+    }
+}
+```
+
+`DELETE /notes/:id`
+
+This endpoint allows an authenticated user to delete a specific note by its id.
+
+Request Parameters
+`id` The unique identifier of the note to delete.
+
+Request Headers
+The request must contain a cookie `id` that identifies the authenticated user.
+
+Response
+If successful, the endpoint will return a 200 OK status code and a JSON response with the following format:
+```json
+{
+    "STATUS": "OK",
+    "data": {
+        "note_id": 4,
+        "note_title": "Demo",
+        "note_content": "This is a demo note",
+        "note_status": "active",
+        "note_creation_date": "2023-02-17T17:00:19.000Z",
+        "note_creator": 2
+    }
+}
+```
+If the specified note id does not exist or if the user is not authorized to delete the note, the endpoint will return a 400 Bad Request status code and a JSON response with an error message in the following format:
+```json
+{
+    "STATUS": "ERROR",
+    "message": "string"
+}
+
+```
+
 
 ### Test Code
 
 1. Run the test scripts available under `test` by giving the `npm run test` command in the terminal to test locally.
-# keepnotes
+
