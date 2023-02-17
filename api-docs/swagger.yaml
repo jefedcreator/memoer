@@ -228,6 +228,8 @@ paths:
                 type: string
               message:
                 type: string
+      security:
+        - cookieAuth: []
     get:
       summary: Gets all notes of the authenticated user
       responses:
