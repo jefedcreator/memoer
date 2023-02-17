@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: "Keep Notes API"
-  description: "API for managing notes"
+  description: "API for managing notes. Sign up, Login, Create note, Read notes, Update notes, Delete notes"
   version: "1.0.0"
   contact:
     email: "jefiene77@gmail.com"
@@ -21,6 +21,8 @@ produces:
 paths:
   /:
     get:
+      tags:
+        - user
       summary: "Get welcome message"
       description: "Returns a welcome message with the user's name if a valid user ID cookie is provided."
       produces:
@@ -39,6 +41,8 @@ paths:
         - cookieAuth: []
   /signup:
     post:
+      tags:
+        - user
       summary: User Signup
       description: "Creates a new user object"
       parameters:
@@ -62,6 +66,18 @@ paths:
             user_name: exampleuser
             user_password: examplepassword
             user_mobile: "12345678899"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_name:
+                  type: string
+                user_password:
+                  type: string
+                user_mobile:
+                  type: string
       responses:
         201:
           description: Created
@@ -99,6 +115,8 @@ paths:
                 type: string
   /login:
     post:
+      tags:
+        - user
       summary: User Login
       description: "logs in the user with their username and password, stores the user_id as a cookie for authentication"
       parameters:
@@ -115,6 +133,16 @@ paths:
           example:
             user_name: exampleuser
             user_password: examplepassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_name:
+                  type: string
+                user_password:
+                  type: string
       responses:
         200:
           description: OK
@@ -161,10 +189,11 @@ paths:
               message:
                 type: string
 
-
   /notes:
     post:
-      summary: Create Note
+      tags:
+        - notes
+      summary: authenticated user Create a Note
       parameters:
         - name: body
           in: body
@@ -186,6 +215,18 @@ paths:
             note_title: Note Title
             note_content: Note Content
             note_status: Active
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                note_title:
+                  type: string
+                note_content:
+                  type: string
+                note_status:
+                  type: string
       responses:
         "200":
           description: OK
@@ -230,6 +271,8 @@ paths:
       security:
         - cookieAuth: []
     get:
+      tags:
+        - notes
       summary: Gets all notes of the authenticated user
       responses:
         "200":
@@ -270,7 +313,9 @@ paths:
 
   /notes/{id}:
     put:
-      summary: Update a note by id
+      tags:
+        - notes
+      summary: authenticated user Update their note by id
       description: Allow authenticated user update their note object
       parameters:
         - in: path
@@ -279,18 +324,18 @@ paths:
           required: true
           schema:
             type: integer
-        - in: cookie
-          name: id
-          description: User ID
-          required: true
-          schema:
-            type: integer
-        - in: body
-          name: body
-          description: Updated note details
-          required: true
-          schema:
-            type: object
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                note_title:
+                  type: string
+                note_content:
+                  type: string
+                note_status:
+                  type: string
       responses:
         "200":
           description: OK
@@ -327,8 +372,6 @@ paths:
                     type: string
       security:
         - cookieAuth: []
-
-  /delete:
     delete:
       tags:
         - notes
@@ -339,11 +382,6 @@ paths:
           description: ID of the note to delete
           required: true
           type: integer
-        - name: Cookie
-          in: header
-          description: User authentication cookie
-          required: true
-          type: string
       responses:
         200:
           description: OK
