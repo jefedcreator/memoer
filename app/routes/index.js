@@ -88,7 +88,6 @@ router.get("/notes", (req, res) => {
 router.put("/notes/:id", (req, res) => {
     try {
         let user_id = parseInt(req.cookies.id)
-        console.log("user",user_id);
         let note_id = parseInt(req.params.id)
         if (!user_id) {
             return res.status(400).send({STATUS:"ERROR",message: "login to update your notes"})

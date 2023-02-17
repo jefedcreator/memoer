@@ -6,10 +6,10 @@ Keep Note is a express and node js that helps users capture their minds and allo
 
 Keep Note application allows only the registered users to add notes and access them. To persist user details and notes information, it is stored in a MSQL database that is highly secure and reliable. ​
 
-MySQL database server is open-source database software that is faster, secured,  reliable and cheaper because of its unique storage engine architecture. ​
-
+MySQL database server is open-source database software that is faster, secured, reliable and cheaper because of its unique storage engine architecture. ​
 
 ## API Documentation
+
 This is the documentation for the REST API built using Express.js. The API is used for a note-keeping application that requires users to sign up and log in to access the service.
 
 ### Instructions
@@ -26,6 +26,7 @@ To get started with the API, follow these steps:
 The server will be available at http://localhost:8000/api/v1/
 
 ## Endpoints
+
 The following endpoint is available:
 
 `GET /`
@@ -41,7 +42,9 @@ Status: 200 OK
 "message": "hello <username>, welcome to keep notes!!! 😉"
 }
 ```
+
 OR:
+
 ```json
 Status: 400 Bad Request
 {
@@ -73,6 +76,7 @@ user_mobile (required) - The mobile number of the user
 user_password (required) - The password of the user
 
 Request:
+
 ```json
 POST /signup
 Content-Type: application/json
@@ -85,6 +89,7 @@ Content-Type: application/json
 ```
 
 Response:
+
 ```json
 Status: 200 OK
 {
@@ -98,6 +103,7 @@ Status: 200 OK
     }
 }
 ```
+
 If the request is successful, the API will respond with a status code of 201 (Created) and the data property will contain the newly created user object.
 
 If the request is unsuccessful, the API will respond with a status code of 400 (Bad Request) and the message property will contain an error message describing the issue.
@@ -109,6 +115,7 @@ If an unexpected error occurs, the API will respond with a status code of 500 (I
 This endpoint is used to authenticate a user by logging them in.
 
 Request:
+
 ```json
 POST /login
 Content-Type: application/json
@@ -118,12 +125,14 @@ Content-Type: application/json
   "user_password": "password123"
 }
 ```
+
 The request body contains the following fields:
 
 user_email: The email address of the user.
 user_password: The password of the user.
 
 Response:
+
 ```json
 Status: 200 OK
 {
@@ -166,26 +175,28 @@ note_content (required) - The content of the note
 note_status (required) - The note status, active or inactive
 
 Request body:
-```json
-{
-  "note_title":"Demo",
-  "note_content": "This is a demo note",
-  "note_status" :"active"
-}
 
-```
-Response body:
 ```json
 {
-    "STATUS": "OK",
-    "data": {
-        "note_id": 4,
-        "note_title": "Demo",
-        "note_content": "This is a demo note",
-        "note_status": "active",
-        "note_creation_date": "2023-02-17T17:00:19.000Z",
-        "note_creator": 2
-    }
+  "note_title": "Demo",
+  "note_content": "This is a demo note",
+  "note_status": "active"
+}
+```
+
+Response body:
+
+```json
+{
+  "STATUS": "OK",
+  "data": {
+    "note_id": 4,
+    "note_title": "Demo",
+    "note_content": "This is a demo note",
+    "note_status": "active",
+    "note_creation_date": "2023-02-17T17:00:19.000Z",
+    "note_creator": 2
+  }
 }
 ```
 
@@ -209,40 +220,43 @@ If successful, the response body will be a JSON object containing a STATUS key w
 
 ```json
 {
-    "STATUS": "OK",
-    "data": [
-        {
-            "note_id": 1,
-            "title": "Note 1",
-            "content": "This is the first note",
-            "note_status": "inactive",
-            "note_creator": 1,
-            "created_at": "2022-02-15T15:00:00.000Z",
-        },
-        {
-            "note_id": 2,
-            "title": "Note 2",
-            "content": "This is the second note",
-            "note_status": "active",
-            "note_creator": 1,
-            "note_creation_time": "2022-02-15T16:00:00.000Z",
-        }
-    ]
+  "STATUS": "OK",
+  "data": [
+    {
+      "note_id": 1,
+      "title": "Note 1",
+      "content": "This is the first note",
+      "note_status": "inactive",
+      "note_creator": 1,
+      "created_at": "2022-02-15T15:00:00.000Z"
+    },
+    {
+      "note_id": 2,
+      "title": "Note 2",
+      "content": "This is the second note",
+      "note_status": "active",
+      "note_creator": 1,
+      "note_creation_time": "2022-02-15T16:00:00.000Z"
+    }
+  ]
 }
+```
 
-```
 If the user is not authenticated, the endpoint will return an error message with a status code of 400 Bad Request.
+
 ```json
 {
-    "STATUS": "ERROR",
-    "message": "login to view your notes"
+  "STATUS": "ERROR",
+  "message": "login to view your notes"
 }
 ```
+
 If an error occurs on the server, the endpoint will return an error message with a status code of 500 Internal Server Error.
+
 ```json
 {
-    "STATUS": "ERROR",
-    "message": "Internal Server Error"
+  "STATUS": "ERROR",
+  "message": "Internal Server Error"
 }
 ```
 
@@ -254,11 +268,12 @@ Request Parameters
 Path Parameter: `id` The id of the note to update. (Required).
 
 Request body:
+
 ```json
 {
-    "note_title": "Demo",
-    "note_content": "This is a demo note",
-    "note_status": "active",
+  "note_title": "Demo",
+  "note_content": "This is a demo note",
+  "note_status": "active"
 }
 ```
 
@@ -266,17 +281,18 @@ Request Headers
 This endpoint expects a cookie with the `id` parameter to be present in the request header to authenticate the user. The user `id` is obtained during the login process. Required.
 
 Response:
+
 ```json
 {
-    "STATUS": "OK",
-    "data": {
-        "note_id": 4,
-        "note_title": "Demo",
-        "note_content": "This is a demo note",
-        "note_status": "active",
-        "note_creation_date": "2023-02-17T17:00:19.000Z",
-        "note_creator": 2
-    }
+  "STATUS": "OK",
+  "data": {
+    "note_id": 4,
+    "note_title": "Demo",
+    "note_content": "This is a demo note",
+    "note_status": "active",
+    "note_creation_date": "2023-02-17T17:00:19.000Z",
+    "note_creator": 2
+  }
 }
 ```
 
@@ -292,30 +308,30 @@ The request must contain a cookie `id` that identifies the authenticated user.
 
 Response
 If successful, the endpoint will return a 200 OK status code and a JSON response with the following format:
+
 ```json
 {
-    "STATUS": "OK",
-    "data": {
-        "note_id": 4,
-        "note_title": "Demo",
-        "note_content": "This is a demo note",
-        "note_status": "active",
-        "note_creation_date": "2023-02-17T17:00:19.000Z",
-        "note_creator": 2
-    }
+  "STATUS": "OK",
+  "data": {
+    "note_id": 4,
+    "note_title": "Demo",
+    "note_content": "This is a demo note",
+    "note_status": "active",
+    "note_creation_date": "2023-02-17T17:00:19.000Z",
+    "note_creator": 2
+  }
 }
 ```
+
 If the specified note id does not exist or if the user is not authorized to delete the note, the endpoint will return a 400 Bad Request status code and a JSON response with an error message in the following format:
+
 ```json
 {
-    "STATUS": "ERROR",
-    "message": "string"
+  "STATUS": "ERROR",
+  "message": "string"
 }
-
 ```
-
 
 ### Test Code
 
 1. Run the test scripts available under `test` by giving the `npm run test` command in the terminal to test locally.
-

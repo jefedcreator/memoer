@@ -8,7 +8,6 @@ const createNote = async function (note, done) {
       ...note,
     },
   });
-  console.log("created note", createdNote);
   if (!createdNote) {
     return done("error");
   }
@@ -42,7 +41,6 @@ const getNote = async function (note_id, done) {
 
 const updateNotes = async function (note_id, notesUpdate, done) {
   let { note_title, note_content, note_status } = notesUpdate;
-  console.log("notes id", note_id);
   const notes = await prisma.note.update({
     where: {
       note_id,
