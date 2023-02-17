@@ -8,6 +8,10 @@ const getNotes = (user_id,done) => {
     notesDao.getNotes(user_id,done);
 }
 
+const getNote = (note_id,done) => {
+    notesDao.getNote(note_id,done);
+}
+
 const updateNotes = (note_id,notesUpdate,done) =>{
     notesDao.updateNotes(note_id,notesUpdate,done)
 }
@@ -19,6 +23,7 @@ const deleteNote = (note_id,done) => {
 module.exports = {
     createNote,
     getNotes,
+    getNote,
     updateNotes,
     deleteNote
 }
