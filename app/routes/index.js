@@ -5,6 +5,9 @@ const notesController = require('../controllers/notes.controllers')
 router.get("/", (req, res) => {
     try {
       const username = req.cookies.id
+      if (!username) {
+        return res.status(400).send({STATUS:"ERROR",message: `Signup and login to get authenticated`})  
+      }
       return res.status(200).send({STATUS:"OK",message: `hello ${username}, welcome to  keep notes!!! 😉`})
     } catch (err) {
       res.status(500).send({STATUS:"ERROR",message: err.message})
