@@ -1,0 +1,471 @@
+openapi: 3.0.0
+info:
+  title: "Keep Notes API"
+  description: "API for managing notes"
+  version: "1.0.0"
+  contact: 
+      email: "jefiene77@gmail.com"
+  license: 
+      name: "MIT"
+      url: "https://opensource.org/licenses/MIT"
+
+# basePath: "https://tada-server.onrender.com/"
+servers:
+  - url: /api/v1
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+  /:
+    get:
+      summary: "Get welcome message"
+      description: "Returns a welcome message with the user's name if a valid user ID cookie is provided."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+      security:
+        - cookieAuth: []
+
+  /users:
+    get:
+      summary: "Get all users"
+      description: "Returns a list of all users in the system."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                    username:
+                      type: string
+                    password:
+                      type: string
+                    email:
+                      type: string
+                    created_at:
+                      type: string
+      security:
+        - cookieAuth: []
+
+  /login:
+    post:
+      summary: "Login"
+      description: "Logs in a user and sets a user ID cookie."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          description: "User login details"
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                    username:
+                      type: string
+                    password:
+                      type: string
+                    email:
+                      type: string
+                    created_at:
+                      type: string
+      security:
+        - cookieAuth: []
+  /signup:
+    post:
+      tags:
+        - User
+      summary: Create a new user account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+        description: User details required to create an account
+      responses:
+        201:
+          description: User account created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: "OK"
+                  data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: "John Doe"
+                      email:
+                        type: string
+                        example: "john.doe@example.com"
+                  description: User account created successfully
+        400:
+          description: Invalid user details provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: "ERROR"
+                  message:
+                    type: string
+                    example: "User details invalid"
+                  description: Error response with error message
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: "ERROR"
+                  message:
+                    type: string
+                    example: "Internal server error occurred"
+                  description: Error response with error message
+  /notes:
+    post:
+      tags:
+        - Notes
+      summary: Create a new note
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the note
+                content:
+                  type: string
+                  description: The content of the note
+              required:
+                - title
+                - content
+        description: The note to create
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: The status of the response
+                  data:
+                    type: object
+                    description: The note that was created
+              example:
+                STATUS: OK
+                data:
+                  id: 123
+                  title: "My Note"
+                  content: "This is my note"
+                  note_creator: 456
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: The status of the response
+                  message:
+                    type: string
+                    description: The error message
+              example:
+                STATUS: ERROR
+                message: "Invalid note data"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: The status of the response
+                  message:
+                    type: string
+                    description: The error message
+              example:
+                STATUS: ERROR
+                message: "Internal server error"
+  /notes:
+    get:
+      summary: Retrieve all notes of the logged in user
+      description: This endpoint returns all the notes of the logged in user.
+      responses:
+        200:
+          description: A list of notes of the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: OK or ERROR
+                    example: "OK"
+                  data:
+                    type: array
+                    description: An array of note objects
+                    items:
+                      type: object
+                      properties:
+                        note_id:
+                          type: integer
+                          description: The ID of the note
+                          example: 1
+                        note_title:
+                          type: string
+                          description: The title of the note
+                          example: "Grocery List"
+                        note_body:
+                          type: string
+                          description: The body of the note
+                          example: "1. Milk, 2. Bread, 3. Eggs"
+                        note_creator:
+                          type: integer
+                          description: The ID of the user who created the note
+                          example: 1
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: OK or ERROR
+                    example: "ERROR"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "Invalid user ID"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: OK or ERROR
+                    example: "ERROR"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "Internal server error"
+  /notes/{id}:
+    put:
+      summary: Update a note
+      description: Update the details of a note with the given ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the note to update
+          required: true
+          schema:
+            type: integer
+        - name: noteUpdate
+          in: body
+          description: Note details to update
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              content:
+                type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /delete:
+    delete:
+      tags:
+        - Notes
+      summary: Delete a note by ID
+      description: Deletes a note from the database by its ID
+      parameters:
+        - in: path
+          name: id
+          description: ID of the note to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: Indicates the status of the response
+                  data:
+                    type: object
+                    description: Contains the deleted note
+                    properties:
+                      id:
+                        type: integer
+                        description: The ID of the deleted note
+                      title:
+                        type: string
+                        description: The title of the deleted note
+                      content:
+                        type: string
+                        description: The content of the deleted note
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: Indicates the status of the response
+                  message:
+                    type: string
+                    description: A description of the error that occurred
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    description: Indicates the status of the response
+                  message:
+                    type: string
+                    description: A description of the error that occurred
+
+components:
+  schemas:
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        note_creator:
+          type: integer
+      required:
+        - id
+        - title
+        - content
+        - note_creator
+    Error:
+      type: object
+      properties:
+        STATUS:
+          type: string
+        message:
+          type: string
+      required:
+        - STATUS
+        - message
+securityDefinitions:
+  cookieAuth:
+    type: apiKey
+    in: cookie
+    name: id

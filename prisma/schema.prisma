@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model category {
+  category_id            Int            @id @default(autoincrement())
+  category_name          String         @db.Text
+  category_descr         String         @db.VarChar(50)
+  category_creation_date DateTime       @db.DateTime(0)
+  category_creator       Int
+  user                   user           @relation(fields: [category_creator], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "category_ibfk_1")
+  notecategory           notecategory[]
+
+  @@index([category_creator], map: "category_creator")
+}
+
+model note {
+  note_id            Int            @id @default(autoincrement())
+  note_title         String?        @db.Text
+  note_content       String?        @db.VarChar(50)
+  note_status        String?        @db.Text
+  note_creation_date DateTime       @default(now()) @db.DateTime(0)
+  note_creator       Int
+  user               user           @relation(fields: [note_creator], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_note_creator")
+  notecategory       notecategory[]
+  notereminder       notereminder[]
+  usernote           usernote[]
+
+  @@index([note_creator], map: "fk_note_creator")
+}
+
+model notecategory {
+  notecategory_id Int      @id @default(autoincrement())
+  note_id         Int
+  category_id     Int
+  note            note     @relation(fields: [note_id], references: [note_id], onDelete: NoAction, onUpdate: NoAction, map: "notecategory_ibfk_1")
+  category        category @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "notecategory_ibfk_2")
+
+  @@index([category_id], map: "category_id")
+  @@index([note_id], map: "note_id")
+}
+
+model notereminder {
+  notereminder_id Int      @id @default(autoincrement())
+  note_id         Int
+  reminder_id     Int
+  note            note     @relation(fields: [note_id], references: [note_id], onDelete: NoAction, onUpdate: NoAction, map: "notereminder_ibfk_1")
+  reminder        reminder @relation(fields: [reminder_id], references: [reminder_id], onDelete: NoAction, onUpdate: NoAction, map: "notereminder_ibfk_2")
+
+  @@index([note_id], map: "note_id")
+  @@index([reminder_id], map: "reminder_id")
+}
+
+model reminder {
+  reminder_id            Int            @id @default(autoincrement())
+  reminder_name          String         @db.Text
+  reminder_descr         String         @db.VarChar(50)
+  reminder_type          String         @db.Text
+  reminder_creation_date DateTime       @db.DateTime(0)
+  reminder_creator       Int
+  notereminder           notereminder[]
+  user                   user           @relation(fields: [reminder_creator], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "reminder_ibfk_1")
+
+  @@index([reminder_creator], map: "reminder_creator")
+}
+
+model user {
+  user_id         Int        @id @default(autoincrement())
+  user_name       String     @db.VarChar(50)
+  user_added_date DateTime   @default(now()) @db.DateTime(0)
+  user_password   String     @unique(map: "user_password") @db.VarChar(10)
+  user_mobile     String     @db.VarChar(11)
+  category        category[]
+  note            note[]
+  reminder        reminder[]
+  usernote        usernote[]
+}
+
+model usernote {
+  usernote_id Int  @id @default(autoincrement())
+  user_id     Int
+  note_id     Int
+  user        user @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "usernote_ibfk_1")
+  note        note @relation(fields: [note_id], references: [note_id], onDelete: NoAction, onUpdate: NoAction, map: "usernote_ibfk_2")
+
+  @@index([note_id], map: "note_id")
+  @@index([user_id], map: "user_id")
+}
