@@ -44,40 +44,39 @@ paths:
       tags:
         - user
       summary: User Signup
-      description: "Creates a new user object"
+      description: "Creates a new user"
       parameters:
-        - name: body
+        - name: user_name
           in: body
+          description: Name of the user
           required: true
-          schema:
-            type: object
-            properties:
-              user_name:
-                type: string
-              user_password:
-                type: string
-              user_mobile:
-                type: number
-            required:
-              - user_name
-              - user_password
-              - user_mobile
-          example:
-            user_name: exampleuser
-            user_password: examplepassword
-            user_mobile: "12345678899"
+          type: string
+        - name: user_mobile
+          in: body
+          description: Mobile number of the user
+          required: true
+          type: string
+        - name: user_password
+          in: body
+          description: Password of the user
+          required: true
+          type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
+              type: object
               properties:
                 user_name:
                   type: string
-                user_password:
-                  type: string
+                  description: Name of the user
                 user_mobile:
                   type: string
+                  description: Mobile number of the user
+                user_password:
+                  type: string
+                  description: Password of the user
       responses:
         201:
           description: Created
@@ -86,15 +85,22 @@ paths:
             properties:
               STATUS:
                 type: string
+                example: OK
               data:
                 type: object
                 properties:
                   user_id:
                     type: integer
+                    example: 1
                   user_name:
                     type: string
-                  email:
+                    example: John
+                  user_mobile:
                     type: string
+                    example: +1234567890
+                  user_password:
+                    type: string
+                    example: "********"
         400:
           description: Bad Request
           schema:
@@ -102,8 +108,10 @@ paths:
             properties:
               STATUS:
                 type: string
+                example: ERROR
               message:
                 type: string
+                example: Name, mobile, and password are required
         500:
           description: Internal Server Error
           schema:
@@ -111,14 +119,16 @@ paths:
             properties:
               STATUS:
                 type: string
+                example: ERROR
               message:
                 type: string
+                example: Internal Server Error
   /login:
     post:
       tags:
         - user
       summary: User Login
-      description: "logs in the user with their username and password, stores the user_id as a cookie for authentication"
+      description: "Authenticates a user"
       parameters:
         - name: body
           in: body
@@ -138,11 +148,17 @@ paths:
         content:
           application/json:
             schema:
+              type: object
               properties:
                 user_name:
                   type: string
+                  description: Name of the user
                 user_password:
                   type: string
+                  description: Password of the user
+              required:
+                - user_name
+                - user_password
       responses:
         200:
           description: OK
@@ -151,6 +167,7 @@ paths:
             properties:
               STATUS:
                 type: string
+                example: OK
               data:
                 type: array
                 items:
@@ -158,18 +175,16 @@ paths:
                   properties:
                     user_id:
                       type: integer
+                      example: 1
                     user_name:
                       type: string
-                    user_password:
-                      type: string
+                      example: John
                     user_mobile:
                       type: string
-                    user_added_date:
+                      example: +1234567890
+                    user_password:
                       type: string
-          headers:
-            Set-Cookie:
-              type: string
-              description: The cookie containing the user's ID
+                      example: "********"
         400:
           description: Bad Request
           schema:
@@ -177,8 +192,21 @@ paths:
             properties:
               STATUS:
                 type: string
+                example: ERROR
               message:
                 type: string
+                example: name and password are required
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Invalid name or password
         500:
           description: Internal Server Error
           schema:
@@ -186,96 +214,109 @@ paths:
             properties:
               STATUS:
                 type: string
+                example: ERROR
               message:
                 type: string
+                example: Internal Server Error
 
   /notes:
     post:
       tags:
         - notes
-      summary: authenticated user Create a Note
+      summary: Create a Note
+      description: "Creates a new note with title, content, and status"
       parameters:
-        - name: body
+        - name: note_title
           in: body
+          description: Title of the note
           required: true
-          schema:
-            type: object
-            properties:
-              note_title:
-                type: string
-              note_content:
-                type: string
-              note_status:
-                type: string
-            required:
-              - note_title
-              - note_content
-              - note_status
-          example:
-            note_title: Note Title
-            note_content: Note Content
-            note_status: Active
+          type: string
+        - name: note_content
+          in: body
+          description: Content of the note
+          required: true
+          type: string
+        - name: note_status
+          in: body
+          description: Status of the note
+          required: true
+          type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
+              type: object
               properties:
                 note_title:
                   type: string
+                  description: Title of the note
                 note_content:
                   type: string
+                  description: Content of the note
                 note_status:
                   type: string
+                  description: Status of the note (e.g. "active" or "inactive")
       responses:
-        "200":
-          description: OK
+        201:
+          description: Created
           schema:
             type: object
             properties:
               STATUS:
                 type: string
+                example: OK
               data:
                 type: object
                 properties:
                   note_id:
                     type: integer
-                  note_creator:
-                    type: integer
+                    example: 1
                   note_title:
                     type: string
+                    example: "Meeting notes"
                   note_content:
                     type: string
+                    example: "Discussing project plan with team"
                   note_status:
                     type: string
+                    example: "active"
+                  note_creator:
+                    type: integer
+                    example: 1
                   note_creation_date:
                     type: string
-        "400":
+        400:
           description: Bad Request
           schema:
             type: object
             properties:
               STATUS:
                 type: string
+                example: ERROR
               message:
                 type: string
-        "500":
+                example: Title, status and content are required
+        500:
           description: Internal Server Error
           schema:
             type: object
             properties:
               STATUS:
                 type: string
+                example: ERROR
               message:
                 type: string
+                example: Internal Server Error      
       security:
         - cookieAuth: []
     get:
       tags:
         - notes
       summary: Gets all notes of the authenticated user
+      description: "Retrieves all notes belonging to a user"
       responses:
-        "200":
+        200:
           description: OK
           content:
             application/json:
@@ -284,6 +325,7 @@ paths:
                 properties:
                   STATUS:
                     type: string
+                    example: OK
                   data:
                     type: array
                     items:
@@ -291,14 +333,18 @@ paths:
                       properties:
                         note_id:
                           type: integer
+                          example: 1
+                        user_id:
+                          type: integer
+                          example: 1
                         note_title:
                           type: string
+                          example: "Grocery List"
                         note_content:
                           type: string
-                        note_creator:
-                          type: integer
-        "400":
-          description: Bad Request
+                          example: "Milk, eggs, bread"
+        401:
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -306,8 +352,23 @@ paths:
                 properties:
                   STATUS:
                     type: string
+                    example: ERROR
                   message:
                     type: string
+                    example: Unauthorized: login to view your notes
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Internal Server Error
       security:
         - cookieAuth: []
 
@@ -337,52 +398,6 @@ paths:
                 note_status:
                   type: string
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  STATUS:
-                    type: string
-                  data:
-                    type: object
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  STATUS:
-                    type: string
-                  message:
-                    type: string
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  STATUS:
-                    type: string
-                  message:
-                    type: string
-      security:
-        - cookieAuth: []
-    delete:
-      tags:
-        - notes
-      summary: Deletes authenticated user note
-      parameters:
-        - name: id
-          in: path
-          description: ID of the note to delete
-          required: true
-          type: integer
-      responses:
         200:
           description: OK
           schema:
@@ -393,7 +408,19 @@ paths:
                 example: OK
               data:
                 type: object
-                example: {}
+                properties:
+                  note_id:
+                    type: integer
+                    example: 1
+                  note_title:
+                    type: string
+                    example: Note Title
+                  note_body:
+                    type: string
+                    example: Note Body
+                  note_status:
+                    type: string
+                    example: active
         400:
           description: Bad Request
           schema:
@@ -404,7 +431,40 @@ paths:
                 example: ERROR
               message:
                 type: string
-                example: login to update your notes
+                example: Invalid note details provided
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Unauthorized: login to update your notes
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Forbidden: cannot update another user's note
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Note not found
         500:
           description: Internal Server Error
           schema:
@@ -416,5 +476,97 @@ paths:
               message:
                 type: string
                 example: Internal Server Error
+      security:
+        - cookieAuth: []
+    delete:
+      tags:
+        - notes
+      summary: Deletes authenticated user note
+      description: Deletes the note with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the note to delete
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: OK
+                  message:
+                    type: string
+                    example: Note deleted successfully
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Error message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Unauthorized: Login to delete your notes
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Forbidden: Cannot delete another user's note
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Note not found
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Internal Server Error
       security:
         - cookieAuth: []

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.10.1",
+    "chai-http": "^4.3.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-format": "^4.0.14",

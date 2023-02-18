@@ -1,0 +1,420 @@
+openapi: 3.0.0
+info:
+  title: "Keep Notes API"
+  description: "API for managing notes. Sign up, Login, Create note, Read notes, Update notes, Delete notes"
+  version: "1.0.0"
+  contact:
+    email: "jefiene77@gmail.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+
+# basePath: "https://tada-server.onrender.com/"
+servers:
+  - url: /api/v1
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+  /:
+    get:
+      tags:
+        - user
+      summary: "Get welcome message"
+      description: "Returns a welcome message with the user's name if a valid user ID cookie is provided."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+      security:
+        - cookieAuth: []
+  /signup:
+    post:
+      tags:
+        - user
+      summary: User Signup
+      description: "Creates a new user object"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string
+              user_password:
+                type: string
+              user_mobile:
+                type: number
+            required:
+              - user_name
+              - user_password
+              - user_mobile
+          example:
+            user_name: exampleuser
+            user_password: examplepassword
+            user_mobile: "12345678899"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_name:
+                  type: string
+                user_password:
+                  type: string
+                user_mobile:
+                  type: string
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              data:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  user_name:
+                    type: string
+                  email:
+                    type: string
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+  /login:
+    post:
+      tags:
+        - user
+      summary: User Login
+      description: "logs in the user with their username and password, stores the user_id as a cookie for authentication"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string
+              user_password:
+                type: string
+          example:
+            user_name: exampleuser
+            user_password: examplepassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_name:
+                  type: string
+                user_password:
+                  type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                    user_name:
+                      type: string
+                    user_password:
+                      type: string
+                    user_mobile:
+                      type: string
+                    user_added_date:
+                      type: string
+          headers:
+            Set-Cookie:
+              type: string
+              description: The cookie containing the user's ID
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+
+  /notes:
+    post:
+      tags:
+        - notes
+      summary: authenticated user Create a Note
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              note_title:
+                type: string
+              note_content:
+                type: string
+              note_status:
+                type: string
+            required:
+              - note_title
+              - note_content
+              - note_status
+          example:
+            note_title: Note Title
+            note_content: Note Content
+            note_status: Active
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                note_title:
+                  type: string
+                note_content:
+                  type: string
+                note_status:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              data:
+                type: object
+                properties:
+                  note_id:
+                    type: integer
+                  note_creator:
+                    type: integer
+                  note_title:
+                    type: string
+                  note_content:
+                    type: string
+                  note_status:
+                    type: string
+                  note_creation_date:
+                    type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+      security:
+        - cookieAuth: []
+    get:
+      tags:
+        - notes
+      summary: Gets all notes of the authenticated user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        note_id:
+                          type: integer
+                        note_title:
+                          type: string
+                        note_content:
+                          type: string
+                        note_creator:
+                          type: integer
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                  message:
+                    type: string
+      security:
+        - cookieAuth: []
+
+  /notes/{id}:
+    put:
+      tags:
+        - notes
+      summary: authenticated user Update their note by id
+      description: Allow authenticated user update their note object
+      parameters:
+        - in: path
+          name: id
+          description: Note ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                note_title:
+                  type: string
+                note_content:
+                  type: string
+                note_status:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                  data:
+                    type: object
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                  message:
+                    type: string
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                  message:
+                    type: string
+      security:
+        - cookieAuth: []
+    delete:
+      tags:
+        - notes
+      summary: Deletes authenticated user note
+      parameters:
+        - name: id
+          in: path
+          description: ID of the note to delete
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: OK
+              data:
+                type: object
+                example: {}
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: login to update your notes
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Internal Server Error
+      security:
+        - cookieAuth: []
