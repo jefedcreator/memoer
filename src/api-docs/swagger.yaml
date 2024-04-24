@@ -1,0 +1,572 @@
+openapi: 3.0.0
+info:
+  title: "Keep Notes API"
+  description: "API for managing notes. Sign up, Login, Create note, Read notes, Update notes, Delete notes"
+  version: "1.0.0"
+  contact:
+    email: "jefiene77@gmail.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+
+# basePath: "https://tada-server.onrender.com/"
+servers:
+  - url: /api/v1
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+  /:
+    get:
+      tags:
+        - user
+      summary: "Get welcome message"
+      description: "Returns a welcome message with the user's name if a valid user ID cookie is provided."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+              message:
+                type: string
+      security:
+        - cookieAuth: []
+  /signup:
+    post:
+      tags:
+        - user
+      summary: User Signup
+      description: "Creates a new user"
+      parameters:
+        - name: user_name
+          in: body
+          description: Name of the user
+          required: true
+          type: string
+        - name: user_mobile
+          in: body
+          description: Mobile number of the user
+          required: true
+          type: string
+        - name: user_password
+          in: body
+          description: Password of the user
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  description: Name of the user
+                user_mobile:
+                  type: string
+                  description: Mobile number of the user
+                user_password:
+                  type: string
+                  description: Password of the user
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: OK
+              data:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  user_name:
+                    type: string
+                    example: John
+                  user_mobile:
+                    type: string
+                    example: +1234567890
+                  user_password:
+                    type: string
+                    example: "********"
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Name, mobile, and password are required
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Internal Server Error
+  /login:
+    post:
+      tags:
+        - user
+      summary: User Login
+      description: "Authenticates a user"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string
+              user_password:
+                type: string
+          example:
+            user_name: exampleuser
+            user_password: examplepassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  description: Name of the user
+                user_password:
+                  type: string
+                  description: Password of the user
+              required:
+                - user_name
+                - user_password
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: OK
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                      example: 1
+                    user_name:
+                      type: string
+                      example: John
+                    user_mobile:
+                      type: string
+                      example: +1234567890
+                    user_password:
+                      type: string
+                      example: "********"
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: name and password are required
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Invalid name or password
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Internal Server Error
+
+  /notes:
+    post:
+      tags:
+        - notes
+      summary: Create a Note
+      description: "Creates a new note with title, content, and status"
+      parameters:
+        - name: note_title
+          in: body
+          description: Title of the note
+          required: true
+          type: string
+        - name: note_content
+          in: body
+          description: Content of the note
+          required: true
+          type: string
+        - name: note_status
+          in: body
+          description: Status of the note
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note_title:
+                  type: string
+                  description: Title of the note
+                note_content:
+                  type: string
+                  description: Content of the note
+                note_status:
+                  type: string
+                  description: Status of the note (e.g. "active" or "inactive")
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: OK
+              data:
+                type: object
+                properties:
+                  note_id:
+                    type: integer
+                    example: 1
+                  note_title:
+                    type: string
+                    example: "Meeting notes"
+                  note_content:
+                    type: string
+                    example: "Discussing project plan with team"
+                  note_status:
+                    type: string
+                    example: "active"
+                  note_creator:
+                    type: integer
+                    example: 1
+                  note_creation_date:
+                    type: string
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Title, status and content are required
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Internal Server Error      
+      security:
+        - cookieAuth: []
+    get:
+      tags:
+        - notes
+      summary: Gets all notes of the authenticated user
+      description: "Retrieves all notes belonging to a user"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: OK
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        note_id:
+                          type: integer
+                          example: 1
+                        user_id:
+                          type: integer
+                          example: 1
+                        note_title:
+                          type: string
+                          example: "Grocery List"
+                        note_content:
+                          type: string
+                          example: "Milk, eggs, bread"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Unauthorized: login to view your notes
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - cookieAuth: []
+
+  /notes/{id}:
+    put:
+      tags:
+        - notes
+      summary: authenticated user Update their note by id
+      description: Allow authenticated user update their note object
+      parameters:
+        - in: path
+          name: id
+          description: Note ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                note_title:
+                  type: string
+                note_content:
+                  type: string
+                note_status:
+                  type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: OK
+              data:
+                type: object
+                properties:
+                  note_id:
+                    type: integer
+                    example: 1
+                  note_title:
+                    type: string
+                    example: Note Title
+                  note_body:
+                    type: string
+                    example: Note Body
+                  note_status:
+                    type: string
+                    example: active
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Invalid note details provided
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Unauthorized: login to update your notes
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Forbidden: cannot update another user's note
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Note not found
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Internal Server Error
+      security:
+        - cookieAuth: []
+    delete:
+      tags:
+        - notes
+      summary: Deletes authenticated user note
+      description: Deletes the note with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the note to delete
+          required: true
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: OK
+                  message:
+                    type: string
+                    example: Note deleted successfully
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Error message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Unauthorized: Login to delete your notes
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Forbidden: Cannot delete another user's note
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Note not found
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  STATUS:
+                    type: string
+                    example: ERROR
+                  message:
+                    type: string
+                    example: Internal Server Error
+      security:
+        - cookieAuth: []
