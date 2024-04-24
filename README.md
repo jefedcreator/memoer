@@ -1,10 +1,10 @@
-# KeepNotes
+# Memoer
 
 ## Context
 
-Keep Note is a express and node js that helps users capture their minds and allows them to add notes and lists.​
+Memoer is a express and node js that helps users capture their minds and allows them to add notes and lists.​
 
-Keep Note application allows only the registered users to add notes and access them. To persist user details and notes information, it is stored in a MSQL database that is highly secure and reliable. ​
+Memoer application allows only the registered users to add notes and access them. To persist user details and notes information, it is stored in a MSQL database that is highly secure and reliable. ​
 
 MySQL database server is open-source database software that is faster, secured, reliable and cheaper because of its unique storage engine architecture. ​
 

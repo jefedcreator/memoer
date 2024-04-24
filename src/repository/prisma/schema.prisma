@@ -1,0 +1,83 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum NotePriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum NoteStatus {
+  INCOMPLETE
+  INPROGRESS
+  COMPLETE
+}
+
+model Category {
+  id           Int            @id @default(autoincrement())
+  name         String         @map("category_name") @db.Text
+  description  String         @map("category_description") @db.VarChar(50)
+  userId       Int            @map("note_creator")
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  noteCategory NoteCategory[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+}
+
+model Note {
+  id        Int            @id @default(autoincrement())
+  title     String         @map("note_title") @db.Text
+  content   String         @map("note_content") @db.VarChar(50)
+  status    NoteStatus     @default(INCOMPLETE) @map("note_status")
+  userId    Int            @map("note_creator")
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category  NoteCategory[]
+  priority  NotePriority   @default(LOW) @map("note_priority")
+  reminders NoteReminder[]
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+}
+
+model NoteCategory {
+  id         Int      @id @default(autoincrement())
+  noteId     Int      @map("note_id")
+  categoryId Int      @map("category_id")
+  note       Note     @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model NoteReminder {
+  id         Int  @id @default(autoincrement())
+  noteId     Int  @map("note_id")
+  reminderId Int  @map("reminder_id")
+  note       Note @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Reminder {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.Text
+  content   String   @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique @map("user_name") @db.VarChar(50)
+  email     String     @unique @map("user_email")
+  password  String     @map("user_password") @db.VarChar(11)
+  notes     Note[]
+  reminders Reminder[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  Category  Category[]
+}

@@ -1,0 +1,10 @@
+{
+  "restartable": "rs",
+  "ignore": [".git", "node_modules/", "dist/", "coverage/"],
+  "watch": ["../"],
+  "exec": "tsx ./src/index.ts --env=development",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "json,ts"
+}
