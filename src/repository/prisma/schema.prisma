@@ -74,7 +74,7 @@ model User {
   id        Int        @id @default(autoincrement())
   name      String     @unique @map("user_name") @db.VarChar(50)
   email     String     @unique @map("user_email")
-  password  String     @map("user_password") @db.VarChar(11)
+  password  String     @map("user_password") 
   notes     Note[]
   reminders Reminder[]
   createdAt DateTime   @default(now()) @map("created_at")

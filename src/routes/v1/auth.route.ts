@@ -1,10 +1,11 @@
 import AuthController from "@controllers/auth.controller";
+import { User } from "@repository/user";
+import AuthService from "@services/auth.service";
 import { Router } from "express";
-import { Container } from "typedi";
 
 class AuthRouter {
-  authController = Container.get(AuthController);
   readonly router = Router();
+  readonly authController = new AuthController(new AuthService(new User()));
 
   constructor() {
     this.routes();
@@ -14,7 +15,7 @@ class AuthRouter {
     this.router
       .post("/signup", this.authController.signUp)
       .post("/signin", this.authController.login)
-      .post("/password-reset", this.authController.resetPassword);
+      .post("/password/reset", this.authController.resetPassword);
   }
 }
 

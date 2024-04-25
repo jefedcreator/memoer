@@ -1,13 +1,13 @@
-import { AuthService } from "@services/auth.service";
+import AuthService from "@services/auth.service";
 import { CustomApiResponse } from "@utils";
 import { NextFunction, Request, Response } from "express";
 import { Service } from "typedi";
 
 @Service()
-export default class AuthController {
+class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  public signUp = async (req: Request, res: Response, next: NextFunction) => {
+  
+  signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.authService.signUp(req.body);
       return CustomApiResponse(res, 201, "user created", user);
@@ -16,7 +16,7 @@ export default class AuthController {
     }
   };
 
-  public login = async (req: Request, res: Response, next: NextFunction) => {
+  login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.authService.signIn(req.body);
       return CustomApiResponse(res, 201, "logged in", user);
@@ -25,11 +25,7 @@ export default class AuthController {
     }
   };
 
-  public resetPassword = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const resetPassword = await this.authService.resetPassword(req.body);
       return CustomApiResponse(res, 200, "Reset successful", resetPassword);
@@ -38,3 +34,5 @@ export default class AuthController {
     }
   };
 }
+
+export default AuthController;

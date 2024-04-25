@@ -24,37 +24,34 @@ export class User {
     return await prisma.user.findFirst({ where: { ...where }, ...options });
   }
 
-  public async findByEmail(email: string, options?: IFindOptions) {
+  async findByEmail (email: string, options?: IFindOptions) {
     return await this.findOne({ email }, options);
-  }
+  };
 
-  public async findById(id: number, options?: IFindOptions) {
+  async findById(id: number, options?: IFindOptions) {
     return await this.findOne({ id }, options);
   }
 
-  public async findByUsername(name: string, options?: IFindOptions) {
+  async findByUsername(name: string, options?: IFindOptions) {
     return await this.findOne({ name }, options);
   }
 
-  public async updateUser(
+  async updateUser(
     where: Prisma.UserWhereUniqueInput,
     data: Prisma.UserUpdateInput
   ) {
     return await prisma.user.update({ where: { ...where }, data: { ...data } });
   }
 
-  public async deleteUser(where: Prisma.UserWhereUniqueInput) {
+  async deleteUser(where: Prisma.UserWhereUniqueInput) {
     return await prisma.user.delete({ where: { ...where } });
   }
 
-  public async findMany(
-    where: Prisma.UserWhereInput,
-    data: Prisma.UserFindManyArgs
-  ) {
+  async findMany(where: Prisma.UserWhereInput, data: Prisma.UserFindManyArgs) {
     return await prisma.user.findMany({ where: { ...where }, ...data });
   }
 
-  public async totalUsers(where?: Prisma.UserWhereInput) {
+  async totalUsers(where?: Prisma.UserWhereInput) {
     return await prisma.user.count({
       where: {
         ...where,

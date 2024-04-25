@@ -1,4 +1,5 @@
 import "reflect-metadata";
+
 import { ErrorMiddleware } from "@middlewares/error.middleware";
 import cors from "cors";
 import dateFormat from "date-format";
@@ -15,7 +16,6 @@ const swaggerDoc = YAML.load("src/docs/swagger.yaml");
 morgan.token("time", () =>
   dateFormat.asString(dateFormat.ISO8601_FORMAT, new Date())
 ); 
-
 
 const app = express();
 const PORT = config.port || 8081;

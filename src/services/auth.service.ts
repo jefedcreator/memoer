@@ -10,7 +10,7 @@ import {
 import { Service } from "typedi";
 
 @Service()
-export class AuthService {
+class AuthService {
   constructor(private readonly user: User) {}
 
   public async signUp(payload: IUser) {
@@ -62,3 +62,5 @@ export class AuthService {
     return true;
   }
 }
+
+export default AuthService;

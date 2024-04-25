@@ -3,7 +3,7 @@ import { IUser, ISignIn, IChangePassword } from "../types";
 
 export const UserRegistrationValidator = (user: IUser) => {
   const schema = Joi.object({
-    email: Joi.string().email().trim().required().label("Email"),
+    email: Joi.string().email().trim().lowercase().required().label("Email"),
     name: Joi.string().trim().required().label("Name"),
     password: Joi.string().trim().required().label("Password"),
     phone: Joi.string().trim().required().label("Phone"),
@@ -21,7 +21,7 @@ export const UserRegistrationValidator = (user: IUser) => {
 
 export const LoginValidator = (user: ISignIn) => {
   const schema = Joi.object({
-    email: Joi.string().email().trim().required().label("Email"),
+    email: Joi.string().email().trim().lowercase().required().label("Email"),
     password: Joi.string().trim().required().label("Password"),
   });
   const options = {
