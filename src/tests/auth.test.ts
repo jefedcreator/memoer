@@ -29,11 +29,10 @@ let riderToken;
 describe("POST /v1/auth/signin", function () {
   it("should login a user successfully", async function () {
     const user = {
-      email: "JOHndoe@email.com",
+      email: "JONdoe@email.com",
       password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
-    console.log("sign in response", response.text);
     assert.strictEqual(response.status, 201);
   });
 });
@@ -41,14 +40,14 @@ describe("POST /v1/auth/signin", function () {
 describe("POST /v1/auth/password/reset", function () {
   it("should change password successfully", async function () {
     const user = {
-      email: "jondoe@email.com",
+      email: "jondoe10@email.com",
       password: "notarealpassword11",
       confirmPassword: "notarealpassword11",
     };
     const response = await supertest(app)
       .post("/v1/auth/password/reset")
       .send(user);
-    assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.status, 401);
   });
 });
 

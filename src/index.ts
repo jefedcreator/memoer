@@ -1,5 +1,4 @@
 import "reflect-metadata";
-
 import { ErrorMiddleware } from "@middlewares/error.middleware";
 import cors from "cors";
 import dateFormat from "date-format";
@@ -10,12 +9,11 @@ import swaggerUI from "swagger-ui-express";
 import YAML from "yamljs";
 import { config } from "./config/index";
 import BaseRouter from "./routes/index";
-
 const swaggerDoc = YAML.load("src/docs/swagger.yaml");
 
 morgan.token("time", () =>
-  dateFormat.asString(dateFormat.ISO8601_FORMAT, new Date())
-); 
+  dateFormat.asString(dateFormat.ISO8601_FORMAT, new Date()),
+);
 
 const app = express();
 const PORT = config.port || 8081;
@@ -25,8 +23,8 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(
   morgan(
-    "[:time] :remote-addr :method :url :status :res[content-length] :response-time ms"
-  )
+    "[:time] :remote-addr :method :url :status :res[content-length] :response-time ms",
+  ),
 );
 
 app.get("/", (req, res, next) => {
@@ -46,7 +44,7 @@ app.use((req, res, next) => {
 app.use(ErrorMiddleware);
 
 app.listen(PORT, () =>
-  console.log(`Memoer server started on port http://0.0.0.0:${PORT}`)
+  console.log(`Memoer server started on port http://0.0.0.0:${PORT}`),
 );
 
 export default app;

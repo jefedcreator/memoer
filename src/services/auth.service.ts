@@ -57,7 +57,7 @@ class AuthService {
       { email: value.email },
       {
         password: hashedPassword,
-      }
+      },
     );
     return true;
   }

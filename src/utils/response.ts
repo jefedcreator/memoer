@@ -4,7 +4,7 @@ export const CustomApiResponse = (
   res: Response,
   statusCode: number,
   message: string,
-  data: any
+  data: any,
 ) => {
   res.status(statusCode).json({
     statusCode,

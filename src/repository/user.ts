@@ -24,9 +24,9 @@ export class User {
     return await prisma.user.findFirst({ where: { ...where }, ...options });
   }
 
-  async findByEmail (email: string, options?: IFindOptions) {
+  async findByEmail(email: string, options?: IFindOptions) {
     return await this.findOne({ email }, options);
-  };
+  }
 
   async findById(id: number, options?: IFindOptions) {
     return await this.findOne({ id }, options);
@@ -38,7 +38,7 @@ export class User {
 
   async updateUser(
     where: Prisma.UserWhereUniqueInput,
-    data: Prisma.UserUpdateInput
+    data: Prisma.UserUpdateInput,
   ) {
     return await prisma.user.update({ where: { ...where }, data: { ...data } });
   }

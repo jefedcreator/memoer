@@ -7,7 +7,7 @@ const sign = (id: string) => {
       id,
     },
     config.jwt.user,
-    { expiresIn: "5 Days" }
+    { expiresIn: "5 Days" },
   );
 };
 

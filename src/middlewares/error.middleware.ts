@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
-import { HttpError } from 'http-errors';
+import { NextFunction, Request, Response } from "express";
+import { HttpError } from "http-errors";
 
 interface Exception {
   statusCode: number;
@@ -28,11 +28,11 @@ export const ErrorMiddleware = (
 ) => {
   // set locals, only providing error in development
   res.locals.message = error.message;
-  res.locals.error = req.app.get('env') === 'development' ? error : {};
+  res.locals.error = req.app.get("env") === "development" ? error : {};
 
   res.status(error.statusCode || 503);
   return res.send({
-    status: 'ERROR',
+    status: "ERROR",
     statusCode: error.statusCode,
     message: error.message,
     data: error.data,

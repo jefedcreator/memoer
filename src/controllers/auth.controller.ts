@@ -6,7 +6,7 @@ import { Service } from "typedi";
 @Service()
 class AuthController {
   constructor(private readonly authService: AuthService) {}
-  
+
   signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.authService.signUp(req.body);

@@ -6,7 +6,7 @@ import { Exception } from "./error.middleware";
 export const UserAuth = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const token: any = req.headers["x-auth-token"] || "";
