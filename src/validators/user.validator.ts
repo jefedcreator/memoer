@@ -1,7 +1,9 @@
 import Joi from "joi";
-import { IUser, ISignIn, IChangePassword } from "../types";
+import { IChangePassword, ISignIn, IUser } from "../types";
 
-export const UserRegistrationValidator = (user: IUser) => {
+export const UserRegistrationValidator = (
+  user: IUser
+): Joi.ValidationResult<IUser> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
     name: Joi.string().trim().required().label("Name"),
@@ -19,7 +21,9 @@ export const UserRegistrationValidator = (user: IUser) => {
   return schema.validate(user, options);
 };
 
-export const LoginValidator = (user: ISignIn) => {
+export const LoginValidator = (
+  user: ISignIn
+): Joi.ValidationResult<ISignIn> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
     password: Joi.string().trim().required().label("Password"),
@@ -35,7 +39,9 @@ export const LoginValidator = (user: ISignIn) => {
   return schema.validate(user, options);
 };
 
-export const ResetPasswordValidator = (user: IChangePassword) => {
+export const ResetPasswordValidator = (
+  user: IChangePassword
+): Joi.ValidationResult<IChangePassword> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
     password: Joi.string().trim().required().label("Password"),

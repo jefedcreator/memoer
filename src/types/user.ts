@@ -12,6 +12,6 @@ export interface ISignIn {
 
 export interface IChangePassword {
   email: string;
-  newPassword: string;
-  oldPassword: string;
+  password: string;
+  confirmPassword: string;
 }
