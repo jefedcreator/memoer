@@ -49,7 +49,7 @@ class AuthService {
       throw new Exception(400, "Passwords do not match");
     const user = await this.user.findByEmail(value.email);
     if (!user) throw new Exception(400, "User not found");
-    const isSame = await password.verify(value.oldPassword, user.password);
+    const isSame = await password.verify(value.password, user.password);
     if (isSame)
       throw new Exception(400, "Password is the same as old password");
     let hashedPassword = await password.hash(value.password);
@@ -57,7 +57,7 @@ class AuthService {
       { email: value.email },
       {
         password: hashedPassword,
-      },
+      }
     );
     return true;
   }

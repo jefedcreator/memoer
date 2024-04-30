@@ -37,9 +37,9 @@ export const LoginValidator = (user: ISignIn) => {
 
 export const ResetPasswordValidator = (user: IChangePassword) => {
   const schema = Joi.object({
+    email: Joi.string().email().trim().lowercase().required().label("Email"),
     password: Joi.string().trim().required().label("Password"),
     confirmPassword: Joi.string().trim().required().label("Confirm Password"),
-    email: Joi.string().email().trim().optional().label("Email"),
   });
   const options = {
     errors: {

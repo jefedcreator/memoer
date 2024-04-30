@@ -1,8 +1,6 @@
 import AuthController from "@controllers/auth.controller";
 import { Router } from "express";
-import { Service } from "typedi";
-import { Container } from "typedi";
-
+import { Container, Service } from "typedi";
 @Service()
 class AuthRouter {
   readonly router = Router();
