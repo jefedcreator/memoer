@@ -2,6 +2,7 @@ import assert from "node:assert";
 import { after, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
+import { INote } from "@types";
 
 let userId;
 let riderId;
@@ -31,6 +32,19 @@ describe("POST /v1/auth/signin", function () {
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
     userId = JSON.parse(response.text).data.id;
+    assert.strictEqual(response.status, 201);
+  });
+});
+
+describe("POST /v1/note/add", function () {
+  it("user should add a new note successfully", async function () {
+    const note: INote = {
+      title: "Random",
+      content: "Random stuff",
+      userId,
+      priority: "MEDIUM",
+    };
+    const response = await supertest(app).post("/v1/note/add").send(note);
     assert.strictEqual(response.status, 201);
   });
 });

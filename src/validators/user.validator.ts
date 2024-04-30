@@ -2,7 +2,7 @@ import Joi from "joi";
 import { IChangePassword, ISignIn, IUser } from "../types";
 
 export const UserRegistrationValidator = (
-  user: IUser
+  user: IUser,
 ): Joi.ValidationResult<IUser> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
@@ -22,7 +22,7 @@ export const UserRegistrationValidator = (
 };
 
 export const LoginValidator = (
-  user: ISignIn
+  user: ISignIn,
 ): Joi.ValidationResult<ISignIn> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
@@ -40,7 +40,7 @@ export const LoginValidator = (
 };
 
 export const ResetPasswordValidator = (
-  user: IChangePassword
+  user: IChangePassword,
 ): Joi.ValidationResult<IChangePassword> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
