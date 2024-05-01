@@ -1,15 +1,12 @@
+import { ICreateNote, IUpdateNote } from "@types";
 import assert from "node:assert";
 import { after, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
-import { INote } from "@types";
 
 let userId;
-let riderId;
-let adminId;
 let userToken;
-let adminToken;
-let riderToken;
+let noteId;
 
 describe("POST /v1/auth/signup", function () {
   it("should sign up a new user successfully", async function () {
@@ -32,46 +29,82 @@ describe("POST /v1/auth/signin", function () {
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
     userId = JSON.parse(response.text).data.id;
+    userToken = JSON.parse(response.text).data.token;
     assert.strictEqual(response.status, 201);
   });
 });
 
-describe("POST /v1/note/add", function () {
+describe("POST /v1/notes/", function () {
   it("user should add a new note successfully", async function () {
-    const note: INote = {
+    const note: ICreateNote = {
       title: "Random",
       content: "Random stuff",
-      userId,
       priority: "MEDIUM",
+      category: ["work", "pleasure"],
     };
-    const response = await supertest(app).post("/v1/note/add").send(note);
+    const response = await supertest(app)
+      .post("/v1/notes/")
+      .set({
+        "x-auth-token": userToken,
+      })
+      .send(note);
+    noteId = JSON.parse(response.text).data.id;
     assert.strictEqual(response.status, 201);
+  });
+});
+
+describe("GET /v1/notes/", function () {
+  it("should get a user notes successfully", async function () {
+    const response = await supertest(app)
+      .get(`/v1/notes/`)
+      .set({
+        "x-auth-token": userToken,
+      })
+      .send();
+    assert.strictEqual(response.status, 200);
+  });
+});
+
+describe("PATCH /v1/notes/:id", function () {
+  it("should get a user notes successfully", async function () {
+    const note: IUpdateNote = {
+      title: "Random",
+      content: "Good stuff",
+      priority: "HIGH",
+      status: "COMPLETE",
+    };
+    const response = await supertest(app)
+      .patch(`/v1/notes/${noteId}`)
+      .set({
+        "x-auth-token": userToken,
+      })
+      .send(note);
+    assert.strictEqual(response.status, 200);
+  });
+});
+
+describe("DELETE /v1/notes/:id", function () {
+  it("should delete a user note successfully", async function () {
+    const response = await supertest(app)
+      .delete(`/v1/notes/${noteId}`)
+      .set({
+        "x-auth-token": userToken,
+      })
+      .send();
+    assert.strictEqual(response.status, 200);
   });
 });
 
 after(async function () {
-  if (userId) {
+  if (userToken) {
     const deleteResponse = await supertest(app)
-      .delete(`/v1/user/${userId}`)
+      .delete(`/v1/user/`)
+      .set({
+        "x-auth-token": userToken,
+      })
       .send();
 
     assert.strictEqual(deleteResponse.status, 200);
   }
-  //   if (riderId) {
-  //     const deleteResponse = await supertest(app)
-  //       .delete(`/v1/user/${riderId}`)
-  //       .set({
-  //         "x-auth-token": riderToken,
-  //       });
-  //     assert.strictEqual(deleteResponse.status, 200);
-  //   }
-  //   if (adminId) {
-  //     const deleteResponse = await supertest(app)
-  //       .delete(`/v1/admin/${adminId}`)
-  //       .set({
-  //         "x-auth-token": adminToken,
-  //       });
-  //     assert.strictEqual(deleteResponse.status, 200);
-  //   }
   process.exit(0);
 });

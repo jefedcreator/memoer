@@ -1,23 +1,26 @@
 import { prisma } from "@repository/prisma";
+import { AuthenticatedRequest } from "@types";
 import { jwt } from "@utils";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { Exception } from "./error.middleware";
 
 export const UserAuth = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const token: any = req.headers["x-auth-token"] || "";
     if (token) {
       let decoded: any = jwt.verify(token);
+
       let user = await prisma.user.findFirst({
         where: {
           email: decoded.email,
         },
       });
-      if (user?.id == decoded.id) {
+      if (user?.email == decoded.id) {
+        req.userId = user?.id;
         next();
       } else {
         throw new Exception(401, "Authentication Failed/Invalid Token");

@@ -1,4 +1,10 @@
-import { NotePriority, NoteCategory, Reminder } from ".prisma/client";
+import {
+  NotePriority,
+  NoteCategory,
+  Reminder,
+  NoteStatus,
+} from ".prisma/client";
+import { Prisma } from "@prisma/client";
 
 export interface INote {
   title: string;
@@ -9,4 +15,14 @@ export interface INote {
   reminders?: Pick<Reminder, "title" | "content">[];
 }
 
-export { NotePriority, NoteCategory, Reminder };
+export interface ICreateNote {
+  title: string;
+  content: string;
+  priority?: NotePriority;
+  category?: string[];
+  reminders?: Pick<Reminder, "title" | "content">[];
+}
+
+export interface IUpdateNote extends Prisma.NoteUpdateInput {}
+
+export { NotePriority, NoteCategory, Reminder, NoteStatus };

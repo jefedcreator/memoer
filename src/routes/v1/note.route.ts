@@ -1,6 +1,7 @@
 import NoteController from "@controllers/note.controller";
 import { Router } from "express";
 import { Container, Service } from "typedi";
+import { UserAuth } from "@middlewares/auth.middleware";
 @Service()
 class NoteRouter {
   readonly router = Router();
@@ -11,7 +12,10 @@ class NoteRouter {
   }
 
   private routes() {
-    this.router.post("/add", this.noteController.createNote);
+    this.router.post("/", UserAuth, this.noteController.createNote);
+    this.router.get("/", UserAuth, this.noteController.getNotes);
+    this.router.patch("/:id", UserAuth, this.noteController.updateNote);
+    this.router.delete("/:id", UserAuth, this.noteController.deleteNote);
   }
 }
 

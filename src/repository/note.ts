@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { Service } from "typedi";
-import { INote } from "../types";
+import { ICreateNote } from "../types";
 import { prisma } from "./prisma";
 
 interface IFindOptions {
@@ -10,8 +10,26 @@ interface IFindOptions {
 
 @Service()
 export class Note {
-  async create(data: Omit<INote, "reminders">) {
-    return await prisma.note.create({ data });
+  async create(userId: number, payload: Omit<ICreateNote, "reminders">) {
+    return await prisma.note.create({
+      data: {
+        title: payload.title,
+        content: payload.content,
+        priority: payload.priority,
+        user: { connect: { id: userId } },
+        categories: {
+          create: payload.category?.map((c) => {
+            return {
+              category: {
+                create: {
+                  name: c,
+                },
+              },
+            };
+          }),
+        },
+      },
+    });
   }
 
   async findOne(where: Prisma.NoteWhereUniqueInput, options?: IFindOptions) {
@@ -24,7 +42,7 @@ export class Note {
 
   async updateNote(
     where: Prisma.NoteWhereUniqueInput,
-    data: Prisma.NoteUpdateInput,
+    data: Prisma.NoteUpdateInput
   ) {
     return await prisma.note.update({ where: { ...where }, data: { ...data } });
   }
@@ -37,7 +55,14 @@ export class Note {
     return await prisma.note.findMany({ where: { ...where }, ...data });
   }
 
-  async totalUsers(where?: Prisma.NoteWhereInput) {
+  async findManyNoteCategories(
+    where: Prisma.NoteCategoryWhereInput,
+    data?: Prisma.NoteCategoryFindManyArgs
+  ) {
+    return await prisma.noteCategory.findMany({ where: { ...where }, ...data });
+  }
+
+  async totalNotes(where?: Prisma.NoteWhereInput) {
     return await prisma.note.count({
       where: {
         ...where,

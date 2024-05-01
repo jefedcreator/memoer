@@ -4,11 +4,7 @@ import supertest from "supertest";
 import app from "../index";
 
 let userId;
-let riderId;
-let adminId;
 let userToken;
-let adminToken;
-let riderToken;
 
 describe("POST /v1/auth/signup", function () {
   it("should sign up a new user successfully", async function () {
@@ -31,6 +27,7 @@ describe("POST /v1/auth/signin", function () {
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
     userId = JSON.parse(response.text).data.id;
+    userToken = JSON.parse(response.text).data.token;
     assert.strictEqual(response.status, 201);
   });
 });
@@ -52,26 +49,12 @@ describe("POST /v1/auth/password/reset", function () {
 after(async function () {
   if (userId) {
     const deleteResponse = await supertest(app)
-      .delete(`/v1/user/${userId}`)
+      .delete(`/v1/user/`)
+      .set({
+        "x-auth-token": userToken,
+      })
       .send();
-
     assert.strictEqual(deleteResponse.status, 200);
   }
-  //   if (riderId) {
-  //     const deleteResponse = await supertest(app)
-  //       .delete(`/v1/user/${riderId}`)
-  //       .set({
-  //         "x-auth-token": riderToken,
-  //       });
-  //     assert.strictEqual(deleteResponse.status, 200);
-  //   }
-  //   if (adminId) {
-  //     const deleteResponse = await supertest(app)
-  //       .delete(`/v1/admin/${adminId}`)
-  //       .set({
-  //         "x-auth-token": adminToken,
-  //       });
-  //     assert.strictEqual(deleteResponse.status, 200);
-  //   }
   process.exit(0);
 });

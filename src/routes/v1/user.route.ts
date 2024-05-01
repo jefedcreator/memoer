@@ -1,4 +1,5 @@
 import UserController from "@controllers/user.controller";
+import { UserAuth } from "@middlewares/auth.middleware";
 import { Router } from "express";
 import { Container, Service } from "typedi";
 
@@ -12,7 +13,7 @@ class UserRouter {
   }
 
   private routes() {
-    this.router.delete("/:id", this.userController.deleteUser);
+    this.router.delete("/", UserAuth, this.userController.deleteUser);
   }
 }
 

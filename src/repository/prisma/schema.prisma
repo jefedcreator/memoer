@@ -43,11 +43,12 @@ model Note {
 }
 
 model NoteCategory {
-  id         Int      @id @default(autoincrement())
   noteId     Int      @map("note_id")
   categoryId Int      @map("category_id")
   note       Note     @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([noteId, categoryId])
 }
 
 model Reminder {
@@ -58,8 +59,8 @@ model Reminder {
   updatedAt DateTime @updatedAt @map("updated_at")
   userId    Int?
   noteId    Int?
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Note Note? @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Note      Note?    @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model User {

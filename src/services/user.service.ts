@@ -9,7 +9,6 @@ class UserService {
     private readonly note: Note,
   ) {}
 
-
   async deleteUser(payload: number): Promise<boolean> {
     const user = await this.user.findById(payload);
     if (!user) throw new Exception(400, "User not found");
