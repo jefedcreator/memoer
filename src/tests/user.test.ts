@@ -3,15 +3,15 @@ import assert from "node:assert";
 import { after, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
-
+import { config } from "@config";
 let userToken;
 let noteId;
 
 describe("POST /v1/auth/signup", function () {
   it("should sign up a new user successfully", async function () {
     const user = {
-      email: "JOndoe3@email.com",
-      name: "Jon doe 3",
+      email: "kodeyow624@amankro.com",
+      name: "Jon doe",
       password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signup").send(user);
@@ -22,7 +22,7 @@ describe("POST /v1/auth/signup", function () {
 describe("POST /v1/auth/signin", function () {
   it("should login a user successfully", async function () {
     const user = {
-      email: "JOndoe3@email.com",
+      email: "kodeyow624@amankro.com",
       password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
@@ -45,6 +45,10 @@ describe("POST /v1/notes/", function () {
         "x-auth-token": userToken,
       })
       .send(note);
+    console.log("from email", config.mail.sender);
+
+    console.log("add note response", response.text);
+
     noteId = JSON.parse(response.text).data.id;
     assert.strictEqual(response.status, 201);
   });

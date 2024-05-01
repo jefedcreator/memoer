@@ -2,6 +2,7 @@ import { Exception } from "@middlewares/error.middleware";
 import { Note } from "@repository/note";
 import { User } from "@repository/user";
 import { ICreateNote, IUpdateNote } from "@types";
+import { Mailer } from "@utils";
 import {
   NoteCreationValidator,
   NoteUpdationValidator,
@@ -12,7 +13,8 @@ import { Service } from "typedi";
 class NoteService {
   constructor(
     private readonly user: User,
-    private readonly note: Note
+    private readonly note: Note,
+    private readonly mail: Mailer
   ) {}
 
   private async checkUser(id: number) {
@@ -24,8 +26,15 @@ class NoteService {
   async createNote(userId: number, payload: ICreateNote) {
     const { error, value } = NoteCreationValidator(payload);
     if (error) throw new Exception(400, error.details[0].message);
-    await this.checkUser(userId);
+    const user = await this.checkUser(userId);
     const note = await this.note.create(userId, value);
+    await this.mail.nodemailersend({
+      to: user.email,
+      username: user.name,
+      subject: "Memoer",
+      content: "New note created",
+      template: "<h1>Welcome</h1>",
+    });
     return note;
   }
 

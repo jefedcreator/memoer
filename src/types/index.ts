@@ -5,4 +5,5 @@ interface AuthenticatedRequest extends Request {
 
 export * from "./note";
 export * from "./user";
+export * from "./mail";
 export { AuthenticatedRequest };

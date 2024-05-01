@@ -23,18 +23,11 @@ const PORT = 3000;
 const secrets = process.env;
 
 type MailConfigs = {
-  host: string;
   apiKey: string;
   domain: string;
-  port: number;
   sender: string;
-};
-
-type MongoConfigs = {
-  host: string;
-  user: string;
+  email: string;
   password: string;
-  name: string;
 };
 
 type RedisConfigs = {
@@ -57,10 +50,6 @@ export const config = {
     secretKey: secrets.QOREID_SECRET_KEY,
     host: secrets.QOREID_BASE_URL,
   },
-  mongo: {
-    name: secrets.MONGODB_NAME,
-    host: secrets.MONGODB_URI,
-  } as MongoConfigs,
   redis: {
     host: secrets.REDIS_HOST,
     port: Number(secrets.REDIS_PORT),
@@ -68,11 +57,11 @@ export const config = {
     password: secrets.REDIS_PASSWORD,
   } as RedisConfigs,
   mail: {
-    host: secrets.MAIL_HOST,
-    domain: secrets.MAIL_DOMAIN,
-    port: Number(secrets.MAIL_PORT),
-    apiKey: secrets.MAIL_API_KEY,
-    sender: secrets.MAIL_SENDER,
+    domain: secrets.MAILER_SEND_DOMAIN,
+    apiKey: secrets.MAILER_SEND_API_KEY,
+    sender: secrets.MAILER_SEND_FROM,
+    email: secrets.EMAIL,
+    password: secrets.PASSWORD,
   } as MailConfigs,
   payment: {
     host: secrets.PAYMENT_BASE_URL,
