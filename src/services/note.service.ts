@@ -18,6 +18,7 @@ class NoteService {
   private async checkUser(id: number) {
     const user = await this.user.findById(id);
     if (!user) throw new Exception(400, "Incorrect Id, User does not exist");
+    return user;
   }
 
   async createNote(userId: number, payload: ICreateNote) {

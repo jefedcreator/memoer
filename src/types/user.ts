@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 export interface IUser {
   name: string;
   email: string;
@@ -15,3 +16,8 @@ export interface IChangePassword {
   password: string;
   confirmPassword: string;
 }
+
+export type IUpdateUser = Pick<
+  Prisma.UserWhereUniqueInput,
+  "name" | "email" 
+>;

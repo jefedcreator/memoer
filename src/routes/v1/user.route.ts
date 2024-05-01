@@ -13,7 +13,9 @@ class UserRouter {
   }
 
   private routes() {
+    this.router.get("/", UserAuth, this.userController.getUser);
     this.router.delete("/", UserAuth, this.userController.deleteUser);
+    this.router.patch("/", UserAuth, this.userController.updateUser);
   }
 }
 

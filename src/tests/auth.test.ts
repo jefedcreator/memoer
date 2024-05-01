@@ -3,7 +3,6 @@ import { after, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
 
-let userId;
 let userToken;
 
 describe("POST /v1/auth/signup", function () {
@@ -12,7 +11,6 @@ describe("POST /v1/auth/signup", function () {
       email: "JOndoe@email.com",
       name: "Jon doe",
       password: "notarealpassword10",
-      phone: "0801234",
     };
     const response = await supertest(app).post("/v1/auth/signup").send(user);
     assert.strictEqual(response.status, 201);
@@ -26,7 +24,6 @@ describe("POST /v1/auth/signin", function () {
       password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
-    userId = JSON.parse(response.text).data.id;
     userToken = JSON.parse(response.text).data.token;
     assert.strictEqual(response.status, 201);
   });
@@ -47,7 +44,7 @@ describe("POST /v1/auth/password/reset", function () {
 });
 
 after(async function () {
-  if (userId) {
+  if (userToken) {
     const deleteResponse = await supertest(app)
       .delete(`/v1/user/`)
       .set({

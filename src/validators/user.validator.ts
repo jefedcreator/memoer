@@ -1,14 +1,31 @@
 import Joi from "joi";
-import { IChangePassword, ISignIn, IUser } from "../types";
+import { IChangePassword, ISignIn, IUpdateUser, IUser } from "../types";
 
 export const UserRegistrationValidator = (
-  user: IUser,
+  user: IUser
 ): Joi.ValidationResult<IUser> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
     name: Joi.string().trim().required().label("Name"),
     password: Joi.string().trim().required().label("Password"),
-    phone: Joi.string().trim().required().label("Phone"),
+  });
+  const options = {
+    errors: {
+      wrap: {
+        label: "",
+        array: "",
+      },
+    },
+  };
+  return schema.validate(user, options);
+};
+
+export const UserUpdationValidator = (
+  user: IUpdateUser
+): Joi.ValidationResult<IUpdateUser> => {
+  const schema = Joi.object({
+    email: Joi.string().email().trim().lowercase().optional().label("Email"),
+    name: Joi.string().trim().optional().label("Name"),
   });
   const options = {
     errors: {
@@ -22,7 +39,7 @@ export const UserRegistrationValidator = (
 };
 
 export const LoginValidator = (
-  user: ISignIn,
+  user: ISignIn
 ): Joi.ValidationResult<ISignIn> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
@@ -40,7 +57,7 @@ export const LoginValidator = (
 };
 
 export const ResetPasswordValidator = (
-  user: IChangePassword,
+  user: IChangePassword
 ): Joi.ValidationResult<IChangePassword> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
