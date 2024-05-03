@@ -1,6 +1,6 @@
 {
   "ext": "ts",
-  "ignore": ["*.test.ts"],
+  "ignore": ["*.test.ts", "./cron/*"],
   "watch": ["index.ts", "src"],
   "exec": "yarn build && yarn start"
 }

@@ -76,7 +76,6 @@ export class Mailer {
       };
       await this.transporter.sendMail(message);
     } catch (error: any) {
-      console.error("nodemailer error", error);
       throw new Exception(400, error.body.message);
     }
   }

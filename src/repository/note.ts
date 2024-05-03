@@ -51,7 +51,7 @@ export class Note {
     return await prisma.note.delete({ where: { ...where } });
   }
 
-  async findMany(where: Prisma.NoteWhereInput, data: Prisma.NoteFindManyArgs) {
+  async findMany(where?: Prisma.NoteWhereInput, data?: Prisma.NoteFindManyArgs) {
     return await prisma.note.findMany({ where: { ...where }, ...data });
   }
 

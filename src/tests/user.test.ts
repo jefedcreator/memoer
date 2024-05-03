@@ -3,7 +3,6 @@ import assert from "node:assert";
 import { after, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
-import { config } from "@config";
 let userToken;
 let noteId;
 
@@ -32,20 +31,45 @@ describe("POST /v1/auth/signin", function () {
 });
 
 describe("POST /v1/notes/", function () {
-  it("user should add a new note successfully", async function () {
+  it("user should add new notes successfully", async function () {
     const note: ICreateNote = {
       title: "Random",
       content: "Random stuff",
       priority: "MEDIUM",
       category: ["work", "pleasure"],
     };
-    const response = await supertest(app)
-      .post("/v1/notes/")
-      .set({
-        "x-auth-token": userToken,
-      })
-      .send(note);
-    console.log("from email", config.mail.sender);
+    const note2: ICreateNote = {
+      title: "Random",
+      content: "Random stuff",
+      priority: "LOW",
+      category: ["work", "pleasure"],
+    };
+    const note3: ICreateNote = {
+      title: "Random",
+      content: "Random stuff",
+      priority: "HIGH",
+      category: ["work", "pleasure"],
+    };
+    const [response] = await Promise.all([
+      supertest(app)
+        .post("/v1/notes/")
+        .set({
+          "x-auth-token": userToken,
+        })
+        .send(note),
+      supertest(app)
+        .post("/v1/notes/")
+        .set({
+          "x-auth-token": userToken,
+        })
+        .send(note2),
+      supertest(app)
+        .post("/v1/notes/")
+        .set({
+          "x-auth-token": userToken,
+        })
+        .send(note3),
+    ]);
 
     console.log("add note response", response.text);
 

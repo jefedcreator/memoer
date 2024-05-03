@@ -1,12 +1,13 @@
 import { Exception } from "@middlewares/error.middleware";
 import { Note } from "@repository/note";
 import { User } from "@repository/user";
-import { ICreateNote, IUpdateNote } from "@types";
+import { ICreateNote, IUpdateNote, NotePriority } from "@types";
 import { Mailer } from "@utils";
 import {
   NoteCreationValidator,
   NoteUpdationValidator,
 } from "@validators/note.validator";
+import { setInterval } from "timers/promises";
 import { Service } from "typedi";
 
 @Service()
@@ -28,13 +29,6 @@ class NoteService {
     if (error) throw new Exception(400, error.details[0].message);
     const user = await this.checkUser(userId);
     const note = await this.note.create(userId, value);
-    await this.mail.nodemailersend({
-      to: user.email,
-      username: user.name,
-      subject: "Memoer",
-      content: "New note created",
-      template: "<h1>Welcome</h1>",
-    });
     return note;
   }
 
@@ -98,6 +92,43 @@ class NoteService {
     const note = await this.note.findOne({ userId, id });
     if (!note) throw new Exception(400, "Incorrect Id, Note not found");
     return await this.note.deleteNote({ userId, id });
+  }
+
+  async sendNoteReminder() {
+    setTimeout(async () => {
+      await Promise.all([
+        this.sendReminderForPriority("HIGH"),
+        this.sendReminderForPriority("MEDIUM"),
+        this.sendReminderForPriority("LOW"),
+      ]);
+    }, 60000);
+    setTimeout(async () => {
+      await Promise.all([
+        this.sendReminderForPriority("HIGH"),
+        this.sendReminderForPriority("MEDIUM"),
+      ]);
+    }, 45000);
+    setTimeout(async () => {
+      await Promise.all([this.sendReminderForPriority("HIGH")]);
+    }, 30000);
+    return true;
+  }
+
+  private async sendReminderForPriority(priority: NotePriority) {
+    const notes = await this.note.findMany({ priority });
+    notes.forEach(async (note) => {
+      console.log(`${priority} priority: ${note.content}`);
+      if (note.userId && note.status !== "COMPLETE") {
+        let user = await this.checkUser(note.userId);
+        await this.mail.nodemailersend({
+          to: user.email,
+          username: user.name,
+          subject: "Memoer",
+          content: "You have a reminder",
+          template: "<h1>Welcome</h1>",
+        });
+      }
+    });
   }
 }
 

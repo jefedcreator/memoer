@@ -65,6 +65,19 @@ class NoteController {
       next(e);
     }
   };
+
+  sendReminders = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const status = await this.noteService.sendNoteReminder();
+      return CustomApiResponse(res, 200, "reminders sent", status);
+    } catch (e) {
+      next(e);
+    }
+  };
 }
 
 export default NoteController;
