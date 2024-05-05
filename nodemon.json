@@ -1,5 +1,5 @@
 {
-  "ext": "ts",
+  "ext": "ts,yaml",
   "ignore": ["*.test.ts", "./cron/*"],
   "watch": ["index.ts", "src"],
   "exec": "yarn build && yarn start"
