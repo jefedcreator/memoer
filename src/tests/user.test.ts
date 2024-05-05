@@ -91,7 +91,7 @@ describe("GET /v1/notes/", function () {
 });
 
 describe("PATCH /v1/notes/:id", function () {
-  it("should get a user notes successfully", async function () {
+  it("should update a user note successfully", async function () {
     const note: IUpdateNote = {
       title: "Random",
       content: "Good stuff",
@@ -104,6 +104,18 @@ describe("PATCH /v1/notes/:id", function () {
         "x-auth-token": userToken,
       })
       .send(note);
+    assert.strictEqual(response.status, 200);
+  });
+});
+
+describe("GET /v1/notes/:id", function () {
+  it("should get a user note successfully", async function () {
+    const response = await supertest(app)
+      .get(`/v1/notes/${noteId}`)
+      .set({
+        "x-auth-token": userToken,
+      })
+      .send();
     assert.strictEqual(response.status, 200);
   });
 });

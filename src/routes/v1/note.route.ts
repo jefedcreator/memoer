@@ -14,6 +14,7 @@ class NoteRouter {
   private routes() {
     this.router.post("/", UserAuth, this.noteController.createNote);
     this.router.get("/", UserAuth, this.noteController.getNotes);
+    this.router.patch("/:id", UserAuth, this.noteController.getNote);
     this.router.patch("/:id", UserAuth, this.noteController.updateNote);
     this.router.delete("/:id", UserAuth, this.noteController.deleteNote);
     this.router.get("/reminder", this.noteController.sendReminders);

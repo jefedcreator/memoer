@@ -51,6 +51,21 @@ class NoteController {
     }
   };
 
+  getNote = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const id = Number(req.userId);
+      const noteId = Number(req.params.id);
+      const user = await this.noteService.getNote(id, noteId);
+      return CustomApiResponse(res, 200, "note fetched", user);
+    } catch (e) {
+      next(e);
+    }
+  };
+
   deleteNote = async (
     req: AuthenticatedRequest,
     res: Response,

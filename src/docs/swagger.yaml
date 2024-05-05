@@ -552,6 +552,90 @@ paths:
         - ApiKeyAuth: []
 
   /notes/{id}:
+    get:
+      tags:
+        - user
+      summary: authenticated user get a note by id
+      description: Allow authenticated user get their note object
+      parameters:
+        - in: path
+          name: id
+          description: Note ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: OK
+              data:
+                type: object
+                properties:
+                  priority:
+                    type: string
+                    example: MEDIUM
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Invalid note details provided
+        401:
+          description: Unauthorized
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Unauthorized login to update your notes
+        403:
+          description: Forbidden
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Forbidden cannot update another user's note
+        404:
+          description: Not Found
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Note not found
+        500:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              STATUS:
+                type: string
+                example: ERROR
+              message:
+                type: string
+                example: Internal Server Error
+      security:
+        - ApiKeyAuth: []
     patch:
       tags:
         - user

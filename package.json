@@ -11,7 +11,8 @@
     "build-secrets": "tsx -r module-alias/register ./dist/config/build.env.js",
     "start:dev": "yarn run build && tsx -r module-alias/register ./dist",
     "test": "set NODE_ENV=test && yarn build && tsx -r module-alias/register --test --test-concurrency=1 ./src/tests/**test.ts",
-    "cron": "tsx src/cron/index.ts"
+    "cron": "tsx src/cron/index.ts",
+    "start:cron": "concurrently \"yarn start\" \"yarn cron\""
   },
   "_moduleAliases": {
     "@controllers": "dist/controllers",
@@ -27,6 +28,7 @@
     "@prisma/client": "^5.13.0",
     "@types/node": "^20.12.7",
     "bcrypt": "^5.1.1",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "date-format": "^4.0.14",
     "express": "^4.19.2",

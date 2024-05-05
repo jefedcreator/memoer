@@ -87,6 +87,13 @@ class NoteService {
     return await this.note.updateNote({ userId, id }, value);
   }
 
+  async getNote(userId: number, id: number) {
+    await this.checkUser(userId);
+    const note = await this.note.findOne({ userId, id });
+    if (!note) throw new Exception(400, "Incorrect Id, Note not found");
+    return note;
+  }
+
   async deleteNote(userId: number, id: number) {
     await this.checkUser(userId);
     const note = await this.note.findOne({ userId, id });
