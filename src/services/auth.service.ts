@@ -13,6 +13,20 @@ import { Service } from "typedi";
 class AuthService {
   constructor(private readonly user: User) {}
 
+  private async getUserByEmail(email: string) {
+    const user = await this.user.findByEmail(email, {
+      select: {
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        id: true,
+      },
+    });
+    if (!user) throw new Exception(400, "Incorrect email, User does not exist");
+    return user;
+  }
+
   public async signUp(payload: IUser) {
     const { error, value } = UserRegistrationValidator(payload);
     if (error) throw new Exception(400, error.details[0].message);
@@ -21,18 +35,17 @@ class AuthService {
     const username = await this.user.findByUsername(value.name);
     if (username) throw new Exception(409, "username already exists");
     const passwordHash = await password.hash(value.password);
-    const user = await this.user.create({
+    const { password: userPassword, ...rest } = await this.user.create({
       ...value,
       password: passwordHash,
     });
-    return user;
+    return { ...rest };
   }
 
   public async signIn(payload: IUser) {
     const { error, value } = LoginValidator(payload);
     if (error) throw new Exception(400, error.details[0].message);
-    const user = await this.user.findByEmail(value.email);
-    if (!user) throw new Exception(400, "Incorrect email, User does not exist");
+    const user = await this.getUserByEmail(value.email);
     let compare = await password.verify(value.password, user.password);
     if (!compare) throw new Exception(400, "Incorrect password");
     let token = jwt.sign(user.email);
@@ -47,7 +60,7 @@ class AuthService {
     if (error) throw new Exception(400, error.details[0].message);
     if (value.password != value.confirmPassword)
       throw new Exception(400, "Passwords do not match");
-    const user = await this.user.findByEmail(value.email);
+    const user = await this.getUserByEmail(value.email);
     if (!user) throw new Exception(400, "User not found");
     const isSame = await password.verify(value.password, user.password);
     if (isSame)
@@ -57,7 +70,7 @@ class AuthService {
       { email: value.email },
       {
         password: hashedPassword,
-      },
+      }
     );
     return true;
   }

@@ -1,10 +1,20 @@
 # Memoer
 
-## Context
+A nodejs express server application for a note keeping, with scheduled daily email reminders
 
-Memoer is a express and node js that helps users capture their minds and allows them to add notes and lists.​
+# Table of Contents
 
-Memoer application allows only the registered users to add notes and access them. To persist user details and notes information, it is stored in a MSQL database that is highly secure and reliable. ​
+[Intoduction](#Introduction)
+
+[Local development](#local-development)
+
+[Docker](#docker)
+
+[Testing](#testing)
+
+## Introduction
+
+committing to a to-do list or an important note can be a hassle, especially if you run on a very busy schedule. Memoer helps to solve the issue of forgetting an important action or task to be carried out. It is a Node.js, Express with mySQL database application that helps users capture their thoughts and allows them to add notes and lists. Additionally, it provides daily email reminders for incomplete tasks based on the priority you set while creating a note. Email reminders for high-priority notes are sent every 8 hours, medium-priority notes every 16 hours, and low-priority notes every 24 hours.
 
 MySQL database server is open-source database software that is faster, secured, reliable and cheaper because of its unique storage engine architecture. ​
 
@@ -17,321 +27,437 @@ This is the documentation for the REST API built using Express.js. The API is us
 Getting Started
 To get started with the API, follow these steps:
 
-1. Clone the repository onto your local machine using git clone <repository-url>.
+1. Clone the repository onto your local machine using git clone https://github.com/jefedcreator/memoer.git.
 
-2. Run `npm install` to install all the required dependencies.
+2. Run `yarn install` to install all the required dependencies.
 
-3. Run `npm start` to start the server.
+3. Run `yarn start` to start the server.
 
 The server will be available at http://localhost:8000/api/v1/
 
-## Endpoints
+# 🚀 Get started here
 
-The following endpoint is available:
+This template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.
 
-`GET /`
+## 🔖 **How to use this template**
 
-This endpoint is used to check if the user is authenticated. The endpoint checks for the presence of a username cookie. If the cookie is present, a welcome message is returned. If the cookie is not present, an error message is returned.
+#### **Step 1: Send requests**
 
-Response:
+RESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.
+
+This collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click "Send" to see what happens.
+
+#### **Step 2: View responses**
+
+Observe the response tab for status code (200 OK), response time, and size.
+
+#### **Step 3: Send new Body data**
+
+Update or add new data in "Body" in the POST request. Typically, Body data is also used in PUT request.
+
+```
+{
+    "name": "Add your name in the body"
+}
+
+```
+
+#### **Step 4: Update the variable**
+
+Variables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.
+
+#### **Step 5: Add tests in the "Tests" tab**
+
+Tests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the "Test Results" tab.
+
+<img src="https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n">
+
+## 💪 Pro tips
+
+- Use folders to group related requests and organize the collection.
+- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) in "Tests" to verify if the API works as expected and execute workflows.
+
+## 💡Related templates
+
+[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  
+[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  
+[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)
+
+# 📁 Collection: Auth
+
+## End-point: sign up
+
+### Method: POST
+
+> ```
+> {{baseUrl}}/auth/signup
+> ```
+
+### Response: 201
 
 ```json
-Status: 200 OK
 {
-"STATUS": "OK",
-"message": "hello <username>, welcome to keep notes!!! 😉"
+  "statusCode": 201,
+  "message": "user created",
+  "data": {
+    "id": 219,
+    "name": "Jon doe",
+    "email": "kodeyow624@amankro.com",
+    "createdAt": "2024-05-05T11:12:55.668Z",
+    "updatedAt": "2024-05-05T11:12:55.668Z"
+  }
 }
 ```
 
-OR:
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: sign in
+
+### Method: POST
+
+> ```
+> {{baseUrl}}/auth/signin
+> ```
+
+### Body (**raw**)
 
 ```json
-Status: 400 Bad Request
 {
-  "STATUS": "ERROR",
-  "message": "Signup and login to get authenticated"
+  "email": "kodeyow624@amankro.com",
+  "password": "notarealpassword10"
 }
 ```
 
-The response body contains the following fields:
-
-STATUS: A string indicating the status of the response, either "OK" or "ERROR".
-message: A message explaining the result of the request.
-The HTTP status codes used by the endpoint are:
-
-200 OK: The request was successful and the user is authenticated.
-400 Bad Request: The request was unsuccessful because the user is not authenticated.
-The endpoint takes no request parameters.
-
-The endpoint can throw the following errors:
-
-500 Internal Server Error: An internal server error occurred.
-
-`POST /signup`
-
-This endpoint is used to sign up a new user by submitting their details in the request body. The user's details include:
-
-user_name (required) - The username of the user
-user_mobile (required) - The mobile number of the user
-user_password (required) - The password of the user
-
-Request:
+### Response: 201
 
 ```json
-POST /signup
-Content-Type: application/json
-
 {
-  "user_name": "jane",
-  "user_password": "password123",
-  "user_mobile": "123344555"
+  "statusCode": 201,
+  "message": "logged in",
+  "data": {
+    "id": 219,
+    "name": "Jon doe",
+    "email": "kodeyow624@amankro.com",
+    "password": "$2b$10$XJbIfv9dRdQCAnYzyVKeh.gjcJ1QOUlI0KFM/C824WBkiC95iA9VG",
+    "createdAt": "2024-05-05T11:12:55.668Z",
+    "updatedAt": "2024-05-05T11:12:55.668Z",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImtvZGV5b3c2MjRAYW1hbmtyby5jb20iLCJpYXQiOjE3MTQ5MDc4OTksImV4cCI6MTcxNTMzOTg5OX0.dLET8CbnW37D7MG_yAXhtz6w_SAkhucRtCsLTPTIuOw"
+  }
 }
 ```
 
-Response:
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: change password
+
+### Method: POST
+
+> ```
+> {{baseUrl}}/auth/password/reset
+> ```
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+# 📁 Collection: User
+
+## End-point: Get authenticated user
+
+Gets information about the authenticated user.
+
+### Method: GET
+
+> ```
+> {{baseUrl}}/user
+> ```
+
+### Response: 200
 
 ```json
-Status: 200 OK
 {
-    "STATUS": "OK",
-    "data": {
-        "user_id": 2,
-        "user_name": "jane",
-        "user_added_date": "2023-02-17T12:01:33.000Z",
-        "user_password": "password123",
-        "user_mobile": "12345678912"
-    }
+  "statusCode": 200,
+  "message": "user fetched",
+  "data": {
+    "email": "kodeyow624@amankro.com",
+    "name": "Jon doe",
+    "createdAt": "2024-05-05T00:44:46.156Z",
+    "updatedAt": "2024-05-05T00:44:46.156Z",
+    "id": 217,
+    "totalNotes": 0
+  }
 }
 ```
 
-If the request is successful, the API will respond with a status code of 201 (Created) and the data property will contain the newly created user object.
-
-If the request is unsuccessful, the API will respond with a status code of 400 (Bad Request) and the message property will contain an error message describing the issue.
-
-If an unexpected error occurs, the API will respond with a status code of 500 (Internal Server Error) and the message property will contain an error message describing the issue.
-
-`POST /login`
-
-This endpoint is used to authenticate a user by logging them in.
-
-Request:
+### Response: 429
 
 ```json
-POST /login
-Content-Type: application/json
-
 {
-  "user_name": "jane",
-  "user_password": "password123"
+  "error": "rateLimited",
+  "message": "Rate limit exceeded. Please retry after 1669048687"
 }
 ```
 
-The request body contains the following fields:
-
-user_email: The email address of the user.
-user_password: The password of the user.
-
-Response:
+### Response: 200
 
 ```json
-Status: 200 OK
 {
-  "STATUS": "OK",
+  "statusCode": 200,
+  "message": "user fetched",
+  "data": {
+    "email": "kodeyow624@amankro.com",
+    "name": "Jon doe",
+    "createdAt": "2024-05-05T00:44:46.156Z",
+    "updatedAt": "2024-05-05T00:44:46.156Z",
+    "id": 217,
+    "totalNotes": 0
+  }
+}
+```
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: new note
+
+### Method: POST
+
+> ```
+> {{baseUrl}}/notes
+> ```
+
+### Headers
+
+| Content-Type | Value     |
+| ------------ | --------- |
+| x-auth-token | {{token}} |
+
+### Body (**raw**)
+
+```json
+{
+  "title": "Random",
+  "content": "Random stuff",
+  "priority": "MEDIUM",
+  "category": ["work", "play"]
+}
+```
+
+### Response: 201
+
+```json
+{
+  "statusCode": 201,
+  "message": "note created",
+  "data": {
+    "id": 72,
+    "title": "random",
+    "content": "Random stuff",
+    "status": "INCOMPLETE",
+    "userId": 219,
+    "priority": "MEDIUM",
+    "createdAt": "2024-05-05T11:26:57.729Z",
+    "updatedAt": "2024-05-05T11:26:57.729Z"
+  }
+}
+```
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: get notes
+
+### Method: GET
+
+> ```
+> {{baseUrl}}/notes
+> ```
+
+### Headers
+
+| Content-Type | Value     |
+| ------------ | --------- |
+| x-auth-token | {{token}} |
+
+### Response: 200
+
+```json
+{
+  "statusCode": 200,
+  "message": "notes fetched",
   "data": [
     {
-      "user_id": 1,
-      "name": "John Doe",
-      "email": "john.doe@example.com"
+      "id": 72,
+      "title": "random",
+      "content": "Random stuff",
+      "status": "INCOMPLETE",
+      "userId": 219,
+      "priority": "MEDIUM",
+      "createdAt": "2024-05-05T11:26:57.729Z",
+      "updatedAt": "2024-05-05T11:26:57.729Z",
+      "categories": [
+        {
+          "name": "play",
+          "id": 124
+        },
+        {
+          "name": "work",
+          "id": 125
+        }
+      ]
     }
   ]
 }
 ```
 
-The response body contains the following fields:
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-STATUS: A string indicating the status of the response, either "OK" or "ERROR".
-data: An array containing a single user object with the following fields:
-user_id: A unique identifier for the user.
-name: The name of the user.
-email: The email address of the user.
-The HTTP status codes used by the endpoint are:
+## End-point: update note
 
-200 OK: The request was successful and the user is authenticated.
-400 Bad Request: The request was unsuccessful due to an error, and an error message is returned.
-The endpoint takes no request parameters.
+### Method: PATCH
 
-The endpoint can throw the following errors:
+> ```
+> {{baseUrl}}/notes/:id
+> ```
 
-500 Internal Server Error: An internal server error occurred.
-Cookies
-This endpoint sets a cookie named "id" on the response. This cookie contains the user ID of the authenticated user, which is used to authenticate subsequent requests.
-
-`POST /notes`
-
-This endpoint is used to create a new note for the authenticated user by submitting the note details in the request body. The note details include:
-
-note_title (required) - The title of the note
-note_content (required) - The content of the note
-note_status (required) - The note status, active or inactive
-
-Request body:
+### Body (**raw**)
 
 ```json
 {
-  "note_title": "Demo",
-  "note_content": "This is a demo note",
-  "note_status": "active"
+  "status": "COMPLETE"
 }
 ```
 
-Response body:
+### Response: 200
 
 ```json
 {
-  "STATUS": "OK",
+  "statusCode": 200,
+  "message": "note updated",
   "data": {
-    "note_id": 4,
-    "note_title": "Demo",
-    "note_content": "This is a demo note",
-    "note_status": "active",
-    "note_creation_date": "2023-02-17T17:00:19.000Z",
-    "note_creator": 2
+    "id": 72,
+    "title": "random",
+    "content": "Random stuff",
+    "status": "COMPLETE",
+    "userId": 219,
+    "priority": "MEDIUM",
+    "createdAt": "2024-05-05T11:26:57.729Z",
+    "updatedAt": "2024-05-05T11:35:46.971Z"
   }
 }
 ```
 
-If the request is successful, the API will respond with a status code of 200 (OK) and the data property will contain the newly created note object.
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-If the request is unsuccessful, the API will respond with a status code of 400 (Bad Request) and the message property will contain an error message describing the issue. Possible issues include:
+## End-point: update user
 
-Invalid note details
-User not logged in
-If an unexpected error occurs, the API will respond with a status code of 500 (Internal Server Error) and the message property will contain an error message describing the issue.
+### Method: PATCH
 
-`GET /notes`
+> ```
+> {{baseUrl}}/user
+> ```
 
-This endpoint is responsible for retrieving all the notes associated with the authenticated user. It returns a JSON response with a list of notes.
-
-Response
-Status Code: 200 OK
-Content-Type: application/json
-Body:
-If successful, the response body will be a JSON object containing a STATUS key with value "OK" and a data key containing an array of notes.
+### Body (**raw**)
 
 ```json
 {
-  "STATUS": "OK",
-  "data": [
-    {
-      "note_id": 1,
-      "title": "Note 1",
-      "content": "This is the first note",
-      "note_status": "inactive",
-      "note_creator": 1,
-      "created_at": "2022-02-15T15:00:00.000Z"
-    },
-    {
-      "note_id": 2,
-      "title": "Note 2",
-      "content": "This is the second note",
-      "note_status": "active",
-      "note_creator": 1,
-      "note_creation_time": "2022-02-15T16:00:00.000Z"
-    }
-  ]
+  "name": "John doe"
 }
 ```
 
-If the user is not authenticated, the endpoint will return an error message with a status code of 400 Bad Request.
+### Response: 200
 
 ```json
 {
-  "STATUS": "ERROR",
-  "message": "login to view your notes"
-}
-```
-
-If an error occurs on the server, the endpoint will return an error message with a status code of 500 Internal Server Error.
-
-```json
-{
-  "STATUS": "ERROR",
-  "message": "Internal Server Error"
-}
-```
-
-`PUT /notes/:id`
-
-This API endpoint allows authenticated users to update their notes by providing the note id and note details.
-
-Request Parameters
-Path Parameter: `id` The id of the note to update. (Required).
-
-Request body:
-
-```json
-{
-  "note_title": "Demo",
-  "note_content": "This is a demo note",
-  "note_status": "active"
-}
-```
-
-Request Headers
-This endpoint expects a cookie with the `id` parameter to be present in the request header to authenticate the user. The user `id` is obtained during the login process. Required.
-
-Response:
-
-```json
-{
-  "STATUS": "OK",
+  "statusCode": 200,
+  "message": "user updated",
   "data": {
-    "note_id": 4,
-    "note_title": "Demo",
-    "note_content": "This is a demo note",
-    "note_status": "active",
-    "note_creation_date": "2023-02-17T17:00:19.000Z",
-    "note_creator": 2
+    "id": 219,
+    "name": "John doe",
+    "email": "kodeyow624@amankro.com",
+    "password": "$2b$10$XJbIfv9dRdQCAnYzyVKeh.gjcJ1QOUlI0KFM/C824WBkiC95iA9VG",
+    "createdAt": "2024-05-05T11:12:55.668Z",
+    "updatedAt": "2024-05-05T11:36:24.367Z"
   }
 }
 ```
 
-`DELETE /notes/:id`
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-This endpoint allows an authenticated user to delete a specific note by its id.
+## End-point: delete note
 
-Request Parameters
-`id` The unique identifier of the note to delete.
+### Method: DELETE
 
-Request Headers
-The request must contain a cookie `id` that identifies the authenticated user.
+> ```
+> {{baseUrl}}/notes/:id
+> ```
 
-Response
-If successful, the endpoint will return a 200 OK status code and a JSON response with the following format:
+### Response: 200
 
 ```json
 {
-  "STATUS": "OK",
+  "statusCode": 200,
+  "message": "note deleted",
   "data": {
-    "note_id": 4,
-    "note_title": "Demo",
-    "note_content": "This is a demo note",
-    "note_status": "active",
-    "note_creation_date": "2023-02-17T17:00:19.000Z",
-    "note_creator": 2
+    "id": 72,
+    "title": "random",
+    "content": "Random stuff",
+    "status": "COMPLETE",
+    "userId": 219,
+    "priority": "MEDIUM",
+    "createdAt": "2024-05-05T11:26:57.729Z",
+    "updatedAt": "2024-05-05T11:35:46.971Z"
   }
 }
 ```
 
-If the specified note id does not exist or if the user is not authorized to delete the note, the endpoint will return a 400 Bad Request status code and a JSON response with an error message in the following format:
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
+## End-point: delete authenticated user
+
+### Method: DELETE
+
+> ```
+> {{baseUrl}}/user
+> ```
+
+### Response: 200
 
 ```json
 {
-  "STATUS": "ERROR",
-  "message": "string"
+  "statusCode": 200,
+  "message": "user deleted",
+  "data": true
 }
 ```
 
-### Test Code
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-1. Run the test scripts available under `test` by giving the `npm run test` command in the terminal to test locally.
+## End-point: get note
+
+### Method: GET
+
+> ```
+> {{baseUrl}}/notes/:id
+> ```
+
+### Headers
+
+| Content-Type | Value     |
+| ------------ | --------- |
+| x-auth-token | {{token}} |
+
+### Response: 200
+
+```json
+{
+  "statusCode": 200,
+  "message": "note fetched",
+  "data": {
+    "id": 72,
+    "title": "random",
+    "content": "Random stuff",
+    "status": "INCOMPLETE",
+    "userId": 219,
+    "priority": "MEDIUM",
+    "createdAt": "2024-05-05T11:26:57.729Z",
+    "updatedAt": "2024-05-05T11:26:57.729Z"
+  }
+}
+```

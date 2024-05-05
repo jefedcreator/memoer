@@ -11,14 +11,8 @@ class UserService {
     private readonly note: Note
   ) {}
 
-  private async checkUser(id: number) {
-    const user = await this.user.findById(id);
-    if (!user) throw new Exception(400, "Incorrect Id, User does not exist");
-    return user;
-  }
-
-  async getUser(payload: number) {
-    const user = await this.user.findById(payload, {
+  async getUserById(id: number) {
+    const user = await this.user.findById(id, {
       select: {
         email: true,
         name: true,
@@ -27,6 +21,12 @@ class UserService {
         id: true,
       },
     });
+    if (!user) throw new Exception(400, "Incorrect Id, User does not exist");
+    return user;
+  }
+
+  async getUser(payload: number) {
+    const user = await this.getUserById(payload);
     if (!user) throw new Exception(400, "User not found");
     const totalNotes = await this.note.totalNotes();
     return { ...user, totalNotes };
@@ -35,12 +35,12 @@ class UserService {
   async updateUser(id: number, data: IUpdateUser) {
     const { error, value } = UserUpdationValidator(data);
     if (error) throw new Exception(400, error.details[0].message);
-    await this.checkUser(id);
+    await this.getUserById(id);
     return await this.user.updateUser({ id }, value);
   }
 
   async deleteUser(userId: number): Promise<boolean> {
-    const user = await this.checkUser(userId);
+    const user = await this.getUserById(userId);
     await this.user.deleteUser(user);
     return true;
   }
