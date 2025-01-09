@@ -187,6 +187,9 @@ paths:
                 email:
                   type: string
                   description: user name
+                currentPassword:
+                  type: string
+                  description: current password
                 password:
                   type: string
                   description: user password
@@ -195,6 +198,7 @@ paths:
                   description: confirm user password
               required:
                 - email
+                - currentPassword
                 - password
                 - confirmPassword
       responses:
@@ -654,11 +658,13 @@ paths:
           application/json:
             schema:
               properties:
-                note_title:
+                title:
                   type: string
-                note_content:
+                content:
                   type: string
-                note_status:
+                status:
+                  type: string
+                priority:
                   type: string
       responses:
         200:

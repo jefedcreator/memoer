@@ -13,6 +13,7 @@ export interface ISignIn {
 
 export interface IChangePassword {
   email: string;
+  currentPassword: string;
   password: string;
   confirmPassword: string;
 }

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
+    // "target": "ES2021",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
@@ -11,6 +11,8 @@
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
+    "moduleResolution": "node",
+    "target": "ES6",
     "baseUrl": "./",
     "paths": {
       "@middlewares/*": ["src/middlewares/*"],

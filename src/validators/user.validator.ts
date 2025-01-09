@@ -61,6 +61,7 @@ export const ResetPasswordValidator = (
 ): Joi.ValidationResult<IChangePassword> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().lowercase().required().label("Email"),
+    currentPassword: Joi.string().trim().required().label("Currrent Password"),
     password: Joi.string().trim().required().label("Password"),
     confirmPassword: Joi.string().trim().required().label("Confirm Password"),
   });

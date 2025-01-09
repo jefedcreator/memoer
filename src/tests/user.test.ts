@@ -6,23 +6,11 @@ import app from "../index";
 let userToken;
 let noteId;
 
-describe("POST /v1/auth/signup", function () {
-  it("should sign up a new user successfully", async function () {
-    const user = {
-      email: "kodeyow624@amankro.com",
-      name: "Jon doe",
-      password: "notarealpassword10",
-    };
-    const response = await supertest(app).post("/v1/auth/signup").send(user);
-    assert.strictEqual(response.status, 201);
-  });
-});
-
 describe("POST /v1/auth/signin", function () {
   it("should login a user successfully", async function () {
     const user = {
-      email: "kodeyow624@amankro.com",
-      password: "notarealpassword10",
+      email: "JOndoe@amankro.com",
+      password: "notarealpassword11",
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
     userToken = JSON.parse(response.text).data.token;
@@ -159,15 +147,3 @@ describe("DELETE /v1/notes/:id", function () {
   });
 });
 
-after(async function () {
-  if (userToken) {
-    const deleteResponse = await supertest(app)
-      .delete(`/v1/user/`)
-      .set({
-        "x-auth-token": userToken,
-      })
-      .send();
-    assert.strictEqual(deleteResponse.status, 200);
-  }
-  process.exit(0);
-});

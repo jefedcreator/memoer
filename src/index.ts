@@ -65,7 +65,6 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/", BaseRouter);
-
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 app.use((req, res, next) => {

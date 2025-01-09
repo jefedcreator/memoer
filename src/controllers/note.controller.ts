@@ -1,7 +1,7 @@
 import NoteService from "@services/note.service";
 import { AuthenticatedRequest } from "@types";
 import { CustomApiResponse } from "@utils";
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 import { Service } from "typedi";
 
 @Service()
@@ -81,12 +81,9 @@ class NoteController {
     }
   };
 
-  sendReminders = async (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ) => {
+  sendReminders = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("here???");
       const status = await this.noteService.sendNoteReminder();
       return CustomApiResponse(res, 200, "reminders sent", status);
     } catch (e) {

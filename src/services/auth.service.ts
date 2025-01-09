@@ -13,7 +13,7 @@ import { Service } from "typedi";
 class AuthService {
   constructor(private readonly user: User) {}
 
-  private async getUserByEmail(email: string) {
+  private async getUserByEmail(email: string, password?: boolean) {
     const user = await this.user.findByEmail(email, {
       select: {
         email: true,
@@ -21,6 +21,7 @@ class AuthService {
         createdAt: true,
         updatedAt: true,
         id: true,
+        password,
       },
     });
     if (!user) throw new Exception(400, "Incorrect email, User does not exist");
@@ -45,12 +46,17 @@ class AuthService {
   public async signIn(payload: IUser) {
     const { error, value } = LoginValidator(payload);
     if (error) throw new Exception(400, error.details[0].message);
-    const user = await this.getUserByEmail(value.email);
-    let compare = await password.verify(value.password, user.password);
+    const { password: p, ...rest } = await this.getUserByEmail(
+      value.email,
+      true
+    );
+    console.log("user", rest);
+    console.log("value", value);
+    let compare = await password.verify(value.password, p);
     if (!compare) throw new Exception(400, "Incorrect password");
-    let token = jwt.sign(user.email);
+    let token = jwt.sign(rest.email);
     return {
-      ...user,
+      ...rest,
       token,
     };
   }
@@ -60,9 +66,14 @@ class AuthService {
     if (error) throw new Exception(400, error.details[0].message);
     if (value.password != value.confirmPassword)
       throw new Exception(400, "Passwords do not match");
-    const user = await this.getUserByEmail(value.email);
-    if (!user) throw new Exception(400, "User not found");
-    const isSame = await password.verify(value.password, user.password);
+    const { password: p, ...rest } = await this.getUserByEmail(
+      value.email,
+      true
+    );
+    if (!rest) throw new Exception(400, "User not found");
+    const isCorrect = await password.verify(value.currentPassword, p);
+    if (!isCorrect) throw new Exception(400, "Incorrect password");
+    const isSame = await password.verify(value.password, p);
     if (isSame)
       throw new Exception(400, "Password is the same as old password");
     let hashedPassword = await password.hash(value.password);

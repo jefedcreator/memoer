@@ -65,6 +65,7 @@ export class Mailer {
           outro: "Looking forward to more notes",
         },
       };
+      console.log("options", options);
 
       let mail = MailGenerator.generate(response);
 

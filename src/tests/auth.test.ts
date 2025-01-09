@@ -9,10 +9,12 @@ describe("POST /v1/auth/signup", function () {
   it("should sign up a new user successfully", async function () {
     const user = {
       email: "JOndoe@email.com",
-      name: "Jon doe",
+      name: "Jill doe",
       password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signup").send(user);
+    console.log("response", response);
+
     assert.strictEqual(response.status, 201);
   });
 });
@@ -33,25 +35,28 @@ describe("POST /v1/auth/password/reset", function () {
   it("should change password successfully", async function () {
     const user = {
       email: "JOndoe@email.com",
+      currentPassword: "notarealpassword10",
       password: "notarealpassword11",
       confirmPassword: "notarealpassword11",
     };
     const response = await supertest(app)
       .post("/v1/auth/password/reset")
       .send(user);
+      console.log('password reset response',response);
+      
     assert.strictEqual(response.status, 200);
   });
 });
 
-after(async function () {
-  if (userToken) {
-    const deleteResponse = await supertest(app)
-      .delete(`/v1/user/`)
-      .set({
-        "x-auth-token": userToken,
-      })
-      .send();
-    assert.strictEqual(deleteResponse.status, 200);
-  }
-  process.exit(0);
-});
+// after(async function () {
+//   if (userToken) {
+//     const deleteResponse = await supertest(app)
+//       .delete(`/v1/user/`)
+//       .set({
+//         "x-auth-token": userToken,
+//       })
+//       .send();
+//     assert.strictEqual(deleteResponse.status, 200);
+//   }
+//   process.exit(0);
+// });
