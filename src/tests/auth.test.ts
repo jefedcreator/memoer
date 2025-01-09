@@ -1,9 +1,25 @@
 import assert from "node:assert";
-import { after, describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
 
+let server;
 let userToken;
+
+before(async () => {
+  server = app.listen();
+});
+
+after(async () => {
+  await supertest(app)
+    .delete(`/v1/user`)
+    .set({
+      "x-auth-token": userToken,
+    })
+    .send();
+  server.close();
+  process.exit();
+});
 
 describe("POST /v1/auth/signup", function () {
   it("should sign up a new user successfully", async function () {
@@ -13,8 +29,6 @@ describe("POST /v1/auth/signup", function () {
       password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signup").send(user);
-    console.log("response", response);
-
     assert.strictEqual(response.status, 201);
   });
 });
@@ -42,8 +56,6 @@ describe("POST /v1/auth/password/reset", function () {
     const response = await supertest(app)
       .post("/v1/auth/password/reset")
       .send(user);
-      console.log('password reset response',response);
-      
     assert.strictEqual(response.status, 200);
   });
 });

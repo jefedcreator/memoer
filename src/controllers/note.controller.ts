@@ -83,7 +83,6 @@ class NoteController {
 
   sendReminders = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log("here???");
       const status = await this.noteService.sendNoteReminder();
       return CustomApiResponse(res, 200, "reminders sent", status);
     } catch (e) {

@@ -10,7 +10,9 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "build-secrets": "tsx -r module-alias/register ./dist/config/build.env.js",
     "start:dev": "yarn run build && tsx -r module-alias/register ./dist",
-    "test": "set NODE_ENV=test && yarn build && tsx -r module-alias/register --test --test-concurrency=1 ./src/tests/**test.ts",
+    "test": "set NODE_ENV=test && yarn build && tsx -r module-alias/register --test --test-concurrency=1 ./src/tests/auth.test.ts ./src/tests/user.test.ts",
+    "test:auth": "set NODE_ENV=test && yarn build && tsx -r module-alias/register --test ./src/tests/auth.test.ts",
+    "test:user": "set NODE_ENV=test && yarn build && tsx -r module-alias/register --test ./src/tests/user.test.ts",
     "cron": "tsx src/cron/index.ts",
     "start:cron": "concurrently \"yarn start\" \"yarn cron\""
   },
@@ -75,3 +77,4 @@
     "@types/express": "4.17.21"
   }
 }
+

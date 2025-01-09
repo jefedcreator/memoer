@@ -50,8 +50,6 @@ class AuthService {
       value.email,
       true
     );
-    console.log("user", rest);
-    console.log("value", value);
     let compare = await password.verify(value.password, p);
     if (!compare) throw new Exception(400, "Incorrect password");
     let token = jwt.sign(rest.email);

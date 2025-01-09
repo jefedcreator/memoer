@@ -11,21 +11,15 @@ export const UserAuth = async (
 ) => {
   try {
     const token: any = req.headers["x-auth-token"] || "";
-    console.log("token", token);
-
     if (token) {
       let decoded: any = jwt.verify(token);
-      console.log("decoded", decoded);
-
       let user = await prisma.user.findFirst({
         where: {
           email: decoded.id,
         },
       });
-      console.log("user", user);
       if (user?.email == decoded.id) {
         req.userId = user?.id;
-        console.log("user id", user?.id);
         next();
       } else {
         throw new Exception(401, "Authentication Failed/Invalid Token");

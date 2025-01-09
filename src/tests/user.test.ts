@@ -1,16 +1,45 @@
 import { ICreateNote, IUpdateNote, IUpdateUser } from "@types";
 import assert from "node:assert";
-import { after, describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
 import supertest from "supertest";
 import app from "../index";
+
+let server;
 let userToken;
 let noteId;
+
+before(async () => {
+  server = app.listen();
+});
+
+after(async () => {
+  await supertest(app)
+    .delete(`/v1/user`)
+    .set({
+      "x-auth-token": userToken,
+    })
+    .send();
+  server.close();
+  process.exit();
+});
+
+describe("POST /v1/auth/signup", function () {
+  it("should sign up a new user successfully", async function () {
+    const user = {
+      email: "JOndoe@email.com",
+      name: "Jill doe",
+      password: "notarealpassword10",
+    };
+    const response = await supertest(app).post("/v1/auth/signup").send(user);
+    assert.strictEqual(response.status, 201);
+  });
+});
 
 describe("POST /v1/auth/signin", function () {
   it("should login a user successfully", async function () {
     const user = {
-      email: "JOndoe@amankro.com",
-      password: "notarealpassword11",
+      email: "JOndoe@email.com",
+      password: "notarealpassword10",
     };
     const response = await supertest(app).post("/v1/auth/signin").send(user);
     userToken = JSON.parse(response.text).data.token;
@@ -58,9 +87,6 @@ describe("POST /v1/notes/", function () {
         })
         .send(note3),
     ]);
-
-    console.log("add note response", response.text);
-
     noteId = JSON.parse(response.text).data.id;
     assert.strictEqual(response.status, 201);
   });
@@ -146,4 +172,3 @@ describe("DELETE /v1/notes/:id", function () {
     assert.strictEqual(response.status, 200);
   });
 });
-
