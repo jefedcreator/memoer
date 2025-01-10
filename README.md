@@ -459,9 +459,44 @@ Gets information about the authenticated user.
     "createdAt": "2024-05-05T11:26:57.729Z",
     "updatedAt": "2024-05-05T11:26:57.729Z"
   }
-}
-
-Docker
-'docker pull jefedcreator/memoer'
-'docker run -d -p 3000:3000 jefedcreator/memoer'
+} 
 ```
+
+# Docker 
+
+This guide explains how to pull and run the **Memoer** application using Docker. Memoer is a Node.js application that can be easily deployed using Docker.
+
+## Prerequisites
+
+Before you start, ensure you have the following installed:
+
+- [Docker](https://www.docker.com/products/docker-desktop) (Make sure Docker is running)
+
+## Steps to Pull Memoer
+
+First, pull the latest Docker image for Memoer from Docker Hub using the following command:
+> ```
+> docker docker pull jefedcreator/memoer
+> ```
+
+To run the server:
+
+> ```
+> docker run -d -p 3000:3000 jefedcreator/memoer
+> ```
+
+
+After running the container, the Memoer application will be accessible at: http://localhost:3000
+
+# Testing
+To test the authentication service, use the following command:
+> ```
+> yarn test:auth
+> ```
+
+To test the user service, use the following command:
+> ```
+> yarn test:user
+> ```
+
+
