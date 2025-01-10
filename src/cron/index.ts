@@ -3,10 +3,10 @@ import { config } from "@config";
 import { fetch, setGlobalDispatcher, Agent } from "undici";
 
 const rule = new schedule.RecurrenceRule();
-rule.second = 29;
+rule.second = 59;
+setGlobalDispatcher(new Agent({ connect: { timeout: 100000_000 } }));
 
 // const job = schedule.scheduleJob(rule, async function () {
-//   setGlobalDispatcher(new Agent({ connect: { timeout: 100000_000 } }));
 //   const response = await fetch(
 //     `http://0.0.0.0:${config.port}/v1/notes/reminder`,
 //     {
@@ -27,4 +27,4 @@ const reminder = async () => {
 
 };
 
-// reminder()
+reminder()

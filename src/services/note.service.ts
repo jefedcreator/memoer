@@ -115,6 +115,8 @@ class NoteService {
   }
 
   private async sendReminderForPriority(priority: NotePriority) {
+    console.log("priority", priority);
+
     const notes = await this.note.findMany({ priority });
     notes.forEach(async (note) => {
       console.log(`${priority} priority: ${note.content}`);

@@ -460,4 +460,8 @@ Gets information about the authenticated user.
     "updatedAt": "2024-05-05T11:26:57.729Z"
   }
 }
+
+Docker
+'docker pull jefedcreator/memoer'
+'docker run -d -p 3000:3000 jefedcreator/memoer'
 ```
